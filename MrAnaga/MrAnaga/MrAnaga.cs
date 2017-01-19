@@ -46,39 +46,22 @@ namespace MrAnaga
         static void Main(string[] args)
         {
             String input;
-            int numOfWords;
-            int i = 0;
-            String[] words = null;
+            List<String> words = new List<String>();
+            HashSet<String> notAnagrams = new HashSet<String>();
 
-            while(true)
+            while (true)
             {
-                input = Console.ReadLine();
-
-                if(int.TryParse(input, out numOfWords))
+                if (String.IsNullOrWhiteSpace(input = Console.ReadLine()))
                 {
-                    if(words == null)
-                    {
-                        words = new String[numOfWords];
-                    }
+                    break;
                 }
                 else
                 {
-                    if (!(String.IsNullOrWhiteSpace(input)))
+                    if(!(input.Any(Char.IsDigit)))
                     {
-                        words[i] = input;
-                        i++;
-                    }
-                    else
-                    {
-                        break;
+                        notAnagrams.Add(sortWord(input));
                     }
                 }
-            }
-
-            HashSet<String> notAnagrams = new HashSet<String>();
-            foreach(String word in words)
-            {
-                notAnagrams.Add(sortWord(word));
             }
 
             Console.WriteLine(notAnagrams.Count);
