@@ -50,7 +50,7 @@ namespace MrAnaga
             int i = 0;
             String[] words = null;
 
-            while(!(String.IsNullOrWhiteSpace(Console.ReadLine())))
+            while(true)
             {
                 input = Console.ReadLine();
 
@@ -67,6 +67,10 @@ namespace MrAnaga
                     {
                         words[i] = input;
                         i++;
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
