@@ -50,7 +50,7 @@ namespace MrAnaga
             int i = 0;
             String[] words = null;
 
-            do
+            while(!(String.IsNullOrWhiteSpace(Console.ReadLine())))
             {
                 input = Console.ReadLine();
 
@@ -69,7 +69,7 @@ namespace MrAnaga
                         i++;
                     }
                 }
-            } while (input != null);
+            }
 
             HashSet<String> notAnagrams = new HashSet<String>();
             foreach(String word in words)
