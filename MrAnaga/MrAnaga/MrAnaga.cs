@@ -63,8 +63,11 @@ namespace MrAnaga
                 }
                 else
                 {
-                    words[i] = input;
-                    i++;
+                    if (!(String.IsNullOrWhiteSpace(input)))
+                    {
+                        words[i] = input;
+                        i++;
+                    }
                 }
             } while (input != null);
 
