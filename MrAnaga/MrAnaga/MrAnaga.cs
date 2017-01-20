@@ -47,6 +47,7 @@ namespace MrAnaga
         {
             String input;
             String sorted;
+            List<String> anagrams = new List<String>();
             List<String> notAnagrams = new List<String>();
 
             while (true)
@@ -55,19 +56,17 @@ namespace MrAnaga
                 {
                     break;
                 }
-                else
+                else if(!(input.Any(Char.IsDigit)))
                 {
-                    if(!(input.Any(Char.IsDigit)))
+                    sorted = sortWord(input);
+                    if (notAnagrams.Contains(sorted))
                     {
-                        sorted = sortWord(input);
-                        if (notAnagrams.Contains(sorted))
-                        {
-                            notAnagrams.Remove(sorted);
-                        }
-                        else
-                        {
-                            notAnagrams.Add(sorted);
-                        }
+                        notAnagrams.Remove(sorted);
+                        anagrams.Add(sorted);
+                    }
+                    else if(!(anagrams.Contains(sorted)))
+                    {
+                        notAnagrams.Add(sorted);
                     }
                 }
             }
