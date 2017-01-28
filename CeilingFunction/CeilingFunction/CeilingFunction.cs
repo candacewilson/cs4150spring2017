@@ -12,7 +12,6 @@ namespace CeilingFunction
         {
             String input;
             String[] initializers = null;
-            String[] treeData = null;
             BST[] trees = null;
             int[] matches = null;
             int count = 0;
@@ -28,15 +27,11 @@ namespace CeilingFunction
                 {
                     initializers = input.Split();
                     trees = new BST[int.Parse(initializers[0])];
-                    treeData = new String[int.Parse(initializers[1])];
                     matches = new int[int.Parse(initializers[0])];
                 }
                 else
                 {
-                    //treeData = input.Split();
-                    //BST tree = createBST(input.Split());
                     trees[count] = createBST(input.Split());
-                    treeData = new String[int.Parse(initializers[1])];
                     count++;
                 }
             }
@@ -63,9 +58,7 @@ namespace CeilingFunction
             }
 
             Console.WriteLine(count);
-            Console.WriteLine("\nDONE");
             Console.Read();
-
         }
 
         private static BST createBST(String[] data)
@@ -177,7 +170,5 @@ namespace CeilingFunction
                 set { rightNode = value; }
             }
         }
-
-
     }
 }
