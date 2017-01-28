@@ -8,7 +8,7 @@ namespace CeilingFunction
 {
     public class BST
     {
-        private static LeafNode rootNode;
+        private LeafNode rootNode;
 
         public BST()
         {
@@ -18,6 +18,7 @@ namespace CeilingFunction
         public LeafNode RootNode
         {
             get { return rootNode; }
+            set { rootNode = value; }
         }
 
         public void AddLeafNode(int nodeData)
@@ -54,36 +55,38 @@ namespace CeilingFunction
                 }
             }
         }
+
+        public class LeafNode
+        {
+            private int nodeData;
+            private LeafNode leftNode;
+            private LeafNode rightNode;
+
+            public LeafNode(int data)
+            {
+                this.nodeData = data;
+                leftNode = null;
+                rightNode = null;
+            }
+
+            public int NodeData
+            {
+                get { return nodeData; }
+            }
+
+            public LeafNode LeftNode
+            {
+                get { return leftNode; }
+                set { leftNode = value; }
+            }
+
+            public LeafNode RightNode
+            {
+                get { return rightNode; }
+                set { rightNode = value; }
+            }
+        }
     }
 
-    public class LeafNode
-    {
-        private int nodeData;
-        private LeafNode leftNode;
-        private LeafNode rightNode;
-
-        public LeafNode(int data)
-        {
-            this.nodeData = data;
-            leftNode = null;
-            rightNode = null;
-        }
-
-        public int NodeData
-        {
-            get { return nodeData; }
-        }
-
-        public LeafNode LeftNode
-        {
-            get { return leftNode; }
-            set { leftNode = value; }
-        }
-
-        public LeafNode RightNode
-        {
-            get { return rightNode; }
-            set { rightNode = value; }
-        }
-    }
+    
 }

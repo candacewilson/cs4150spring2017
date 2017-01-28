@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CeilingFunction.BST;
 
 namespace CeilingFunction
 {
@@ -29,19 +30,21 @@ namespace CeilingFunction
                     initializers = input.Split();
                     trees = new BST[int.Parse(initializers[0])];
                     treeData = new String[int.Parse(initializers[1])];
-                    matches = new int[int.Parse(initializers[0]) - 1];
+                    matches = new int[int.Parse(initializers[0])];
                 }
                 else
                 {
-                    treeData = input.Split();
-                    trees[count] = createBST(treeData);
+                    //treeData = input.Split();
+                    //BST tree = createBST(input.Split());
+                    trees[count] = createBST(input.Split());
+                    treeData = new String[int.Parse(initializers[1])];
                     count++;
                 }
             }
 
             for(int i = 0; i < trees.Length; i++)
             {
-                for(int j = 1; j < trees.Length; j++)
+                for(int j = i + 1; j < trees.Length; j++)
                 {
                     if(SameTreeShape(trees[i].RootNode, trees[j].RootNode))
                     {
@@ -50,13 +53,23 @@ namespace CeilingFunction
                 }
             }
 
-            Console.WriteLine(matches.Length);
+            count = 0;
+
+            foreach(int m in matches)
+            {
+                if(m == 0)
+                {
+                    count++;
+                }
+            }
+
+            Console.WriteLine(count);
             Console.WriteLine("\nDONE");
             Console.Read();
 
         }
 
-        public static BST createBST(String[] data)
+        private static BST createBST(String[] data)
         {
             BST bst = new BST();
 
