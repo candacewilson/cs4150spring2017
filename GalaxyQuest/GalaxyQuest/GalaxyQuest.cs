@@ -113,7 +113,7 @@ namespace GalaxyQuest
                         }
                     }
 
-                    if (yCount > 0)
+                    if ((yCount > 0) && (yCount > A.Length / 2))
                     {
                         return new Point(null, yCount);
                     }
@@ -133,7 +133,7 @@ namespace GalaxyQuest
                         }
                     }
 
-                    if (xCount > 0)
+                    if ((xCount > 0) && (xCount > A.Length / 2))
                     {
                         return new Point(xCount, null);
                     }
@@ -159,11 +159,11 @@ namespace GalaxyQuest
                         }
                     }
 
-                    if (xCount > yCount)
+                    if ((xCount > yCount) && (xCount > A.Length / 2))
                     {
                         return new Point(xCount, null);
                     }
-                    else if (yCount > xCount)
+                    else if ((yCount > xCount) && (yCount > A.Length / 2))
                     {
                         return new Point(null, yCount);
                     }
