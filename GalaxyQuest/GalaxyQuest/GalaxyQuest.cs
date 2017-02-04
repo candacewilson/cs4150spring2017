@@ -44,15 +44,36 @@ namespace GalaxyQuest
             }
             else if (result.X == null)
             {
-                Console.WriteLine(result.Y);
+                if(result.Y > stars.Length / 2)
+                {
+                    Console.WriteLine(result.Y);
+                }
+                else
+                {
+                    Console.WriteLine("NO");
+                }
             }
             else if (result.Y == null)
             {
-                Console.WriteLine(result.X);
+                if (result.X > stars.Length / 2)
+                {
+                    Console.WriteLine(result.X);
+                }
+                else
+                {
+                    Console.WriteLine("NO");
+                }
             }
             else
             {
-                Console.WriteLine(1);
+                if (stars.Length / 2 < 1)
+                {
+                    Console.WriteLine(1);
+                }
+                else
+                {
+                    Console.WriteLine("NO");
+                }
             }
 
             Console.Read();
