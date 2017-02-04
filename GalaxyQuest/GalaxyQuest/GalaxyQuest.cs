@@ -14,7 +14,7 @@ namespace GalaxyQuest
             String[] initializers = null;
             Point[] stars = null;
             String[] parsedInput;
-            int d = 0;
+            long d = 0;
             int count = 0;
 
             while (true)
@@ -58,7 +58,7 @@ namespace GalaxyQuest
             Console.Read();
         }
 
-        public static Point findMajority(Point[] A, int d)
+        public static Point findMajority(Point[] A, long d)
         {
             if(A.Length == 0)
             {
@@ -162,7 +162,7 @@ namespace GalaxyQuest
         /// <returns></returns>
         public static long distance(Point s1, Point s2)
         {
-            return (int)Math.Pow((s1.X - s2.X), 2) + (int)Math.Pow((s1.Y - s2.Y), 2);
+            return (long)Math.Pow((s1.X - s2.X), 2) + (long)Math.Pow((s1.Y - s2.Y), 2);
         }
 
         public class Point
