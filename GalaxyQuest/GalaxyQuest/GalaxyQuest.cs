@@ -59,45 +59,6 @@ namespace GalaxyQuest
                 }
             }
 
-
-
-
-
-
-            //else if (result.X == null)
-            //{
-            //    if(result.Y > stars.Length / 2)
-            //    {
-            //        Console.WriteLine(result.Y);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("NO");
-            //    }
-            //}
-            //else if (result.Y == null)
-            //{
-            //    if (result.X > stars.Length / 2)
-            //    {
-            //        Console.WriteLine(result.X);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("NO");
-            //    }
-            //}
-            //else
-            //{
-            //    if (1 > stars.Length / 2)
-            //    {
-            //        Console.WriteLine(1);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("NO");
-            //    }
-            //}
-
             Console.Read();
         }
 
@@ -135,7 +96,7 @@ namespace GalaxyQuest
                         }
                     }
 
-                    if ((yCount > 0) && (yCount > A.Length / 2))
+                    if (yCount > A.Length / 2)
                     {
                         return y;
                     }
@@ -155,7 +116,7 @@ namespace GalaxyQuest
                         }
                     }
 
-                    if ((xCount > 0) && (xCount > A.Length / 2))
+                    if (xCount > A.Length / 2)
                     {
                         return x;
                     }
@@ -189,6 +150,10 @@ namespace GalaxyQuest
                     {
                         return y;
                     }
+                    else if((xCount == yCount) && (xCount > 0) && (yCount > 0))
+                    {
+                        return xCount > 0 ? x : y;
+                    } 
                     else
                     {
                         return null;
