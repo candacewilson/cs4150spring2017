@@ -150,7 +150,7 @@ namespace GalaxyQuest
                     {
                         return y;
                     }
-                    else if((xCount == yCount) && (xCount > 0) && (yCount > 0))
+                    else if((xCount == yCount) && (xCount > 0) && (yCount > 0) && (xCount > A.Length / 2) && (yCount > A.Length / 2))
                     {
                         return xCount > 0 ? x : y;
                     } 
