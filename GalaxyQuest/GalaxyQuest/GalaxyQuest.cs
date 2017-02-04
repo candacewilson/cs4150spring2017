@@ -42,11 +42,11 @@ namespace GalaxyQuest
             {
                 Console.WriteLine("NO");
             }
-            else if(result.X == null)
+            else if(result.X == 0)
             {
                 Console.WriteLine(result.Y);
             }
-            else if(result.Y == null)
+            else if(result.Y == 0)
             {
                 Console.WriteLine(result.X);
             }
@@ -94,7 +94,7 @@ namespace GalaxyQuest
 
                     if(yCount > 0)
                     {
-                        return new Point(null, yCount);
+                        return new Point(0, yCount);
                     }
                     else
                     {
@@ -114,7 +114,7 @@ namespace GalaxyQuest
 
                     if (xCount > 0)
                     {
-                        return new Point(xCount, null);
+                        return new Point(xCount, 0);
                     }
                     else
                     {
@@ -140,11 +140,11 @@ namespace GalaxyQuest
 
                     if(xCount > yCount)
                     {
-                        return new Point(xCount, null);
+                        return new Point(xCount, 0);
                     }
                     else if(yCount > xCount)
                     {
-                        return new Point(null, yCount);
+                        return new Point(0, yCount);
                     }
                     else
                     {
@@ -162,27 +162,26 @@ namespace GalaxyQuest
         /// <returns></returns>
         public static long distance(Point s1, Point s2)
         {
-            return (int)Math.Pow(((s1.X ?? default(int)) - (s2.X ?? default(int))), 2) 
-                + (int)Math.Pow(((s1.Y ?? default(int)) - (s2.Y ?? default(int))), 2);
+            return (int)Math.Pow((s1.X - s2.X), 2) + (int)Math.Pow((s1.Y - s2.Y), 2);
         }
 
         public class Point
         {
-            private int? x, y;
+            private int x, y;
 
-            public Point(int? x, int? y)
+            public Point(int x, int y)
             {
                 this.x = x;
                 this.y = y;
             }
 
-            public int? X
+            public int X
             {
                 get { return x; }
                 set { x = value; }
             }
 
-            public int? Y
+            public int Y
             {
                 get { return y; }
                 set { y = value; }
