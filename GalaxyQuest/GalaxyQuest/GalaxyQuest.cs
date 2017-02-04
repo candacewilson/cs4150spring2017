@@ -26,7 +26,7 @@ namespace GalaxyQuest
                 else if (initializers == null)
                 {
                     initializers = input.Split();
-                    d = (int)Math.Pow(int.Parse(initializers[0]), 2);
+                    d = (long)Math.Pow(int.Parse(initializers[0]), 2);
                     stars = new Point[int.Parse(initializers[1])];
                 }
                 else
@@ -74,34 +74,91 @@ namespace GalaxyQuest
                 A1 = A.Take(A.Length / 2).ToArray();
                 A2 = A.Skip(A.Length / 2).ToArray();
 
-                Point x = findMajority(A1, d);
-                Point y = findMajority(A2, d);
-
-                if(x == null && y == null)
+                Point y = new Point(0,0);
+                if (A1.Length > A2.Length)
                 {
-                    return null;
+                    y = new Point(A1[A1.Length - 1].X, A1[A1.Length - 1].Y);
                 }
-                else if(x == null)
+                else if (A1.Length < A2.Length)
                 {
-                    int yCount = 0;
-                    foreach(Point p in A)
+                    y = new Point(A2[A2.Length - 1].X, A2[A2.Length - 1].Y);
+                }
+
+                Dictionary<Point, Point> pairs = new Dictionary<Point, Point>();
+
+                for(int i = 0; i < A1.Length; i++)
+                {
+                    if (A1[i] == null)
                     {
-                        if(distance(y, p) <= d)
+                        if(A2[i] == null)
                         {
-                            yCount++;
+                            pairs.Add(new Point(0, 0), new Point(0, 0));
+                        }
+                        else
+                        {
+                            pairs.Add(new Point(0, 0), A2[i]);
                         }
                     }
-
-                    if(yCount > 0)
+                    else if(A1[i] != null)
                     {
-                        return new Point(0, yCount);
+                        if (A2[i] == null)
+                        {
+                            pairs.Add(A1[i], new Point(0, 0));
+                        }
+                        else
+                        {
+                            pairs.Add(A1[i], A2[i]);
+                        }
+                    }
+                }
+
+                Point[] APrime = new Point[A2.Length];
+                int count = 0;
+
+                foreach(KeyValuePair<Point, Point> pair in pairs)
+                {
+                    Point p1 = pair.Key;
+                    Point p2 = pair.Value;
+
+                    if((p1 == null && p2 == null) || (p1 != null && p2 != null))
+                    {
+                        if (distance(p1, p2) <= d)
+                        {
+                            APrime[count] = p2;
+                            count++;
+                        }
+                    }
+                }
+
+                Point x = findMajority(APrime, d);
+                if(x == null)
+                {
+                    if (A.Length % 2 != 0)
+                    {
+                        int yCount = 0;
+                        foreach (Point p in A)
+                        {
+                            if (distance(y, p) <= d)
+                            {
+                                yCount++;
+                            }
+                        }
+
+                        if (yCount > 0)
+                        {
+                            return new Point(0, yCount);
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                     else
                     {
                         return null;
                     }
                 }
-                else if(y == null)
+                else
                 {
                     int xCount = 0;
                     foreach (Point p in A)
@@ -121,36 +178,99 @@ namespace GalaxyQuest
                         return null;
                     }
                 }
-                else
-                {
-                    int xCount = 0;
-                    int yCount = 0;
 
-                    foreach (Point p in A)
-                    {
-                        if (distance(x, p) <= d)
-                        {
-                            xCount++;
-                        }
-                        if (distance(y, p) <= d)
-                        {
-                            yCount++;
-                        }
-                    }
 
-                    if(xCount > yCount)
-                    {
-                        return new Point(xCount, 0);
-                    }
-                    else if(yCount > xCount)
-                    {
-                        return new Point(0, yCount);
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //Point x = findMajority(A1, d);
+                //Point y = findMajority(A2, d);
+
+                //if(x == null && y == null)
+                //{
+                //    return null;
+                //}
+                //else if(x == null)
+                //{
+                //    int yCount = 0;
+                //    foreach(Point p in A)
+                //    {
+                //        if(distance(y, p) <= d)
+                //        {
+                //            yCount++;
+                //        }
+                //    }
+
+                //    if(yCount > 0)
+                //    {
+                //        return new Point(0, yCount);
+                //    }
+                //    else
+                //    {
+                //        return null;
+                //    }
+                //}
+                //else if(y == null)
+                //{
+                //    int xCount = 0;
+                //    foreach (Point p in A)
+                //    {
+                //        if (distance(x, p) <= d)
+                //        {
+                //            xCount++;
+                //        }
+                //    }
+
+                //    if (xCount > 0)
+                //    {
+                //        return new Point(xCount, 0);
+                //    }
+                //    else
+                //    {
+                //        return null;
+                //    }
+                //}
+                //else
+                //{
+                //    int xCount = 0;
+                //    int yCount = 0;
+
+                //    foreach (Point p in A)
+                //    {
+                //        if (distance(x, p) <= d)
+                //        {
+                //            xCount++;
+                //        }
+                //        if (distance(y, p) <= d)
+                //        {
+                //            yCount++;
+                //        }
+                //    }
+
+                //    if(xCount > yCount)
+                //    {
+                //        return new Point(xCount, 0);
+                //    }
+                //    else if(yCount > xCount)
+                //    {
+                //        return new Point(0, yCount);
+                //    }
+                //    else
+                //    {
+                //        return null;
+                //    }
+                //}
             }
         }
 
@@ -162,6 +282,16 @@ namespace GalaxyQuest
         /// <returns></returns>
         public static long distance(Point s1, Point s2)
         {
+            if (s1 == null)
+            {
+                return (long)Math.Pow((0 - s2.X), 2) + (long)Math.Pow((0 - s2.Y), 2);
+            }
+
+            if (s2 == null)
+            {
+                return (long)Math.Pow((s1.X - 0), 2) + (long)Math.Pow((s1.Y - 0), 2);
+            }
+
             return (long)Math.Pow((s1.X - s2.X), 2) + (long)Math.Pow((s1.Y - s2.Y), 2);
         }
 
