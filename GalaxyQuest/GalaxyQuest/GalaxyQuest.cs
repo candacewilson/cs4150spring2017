@@ -38,27 +38,21 @@ namespace GalaxyQuest
             }
 
             Point result = findMajority(stars, d);
-            if (result.X == null)
+            if (result == null)
             {
-                if (result.Y == null)
-                {
-                    Console.WriteLine("NO");
-                }
-                else
-                {
-                    Console.WriteLine(result.Y);
-                }
+                Console.WriteLine("NO");
             }
-            else if (result.X != null)
+            else if (result.X == null)
             {
-                if (result.Y == null)
-                {
-                    Console.WriteLine(result.X);
-                }
-                else
-                {
-                    Console.WriteLine(1);
-                }
+                Console.WriteLine(result.Y);
+            }
+            else if (result.Y == null)
+            {
+                Console.WriteLine(result.X);
+            }
+            else
+            {
+                Console.WriteLine(1);
             }
 
             Console.Read();
@@ -66,11 +60,11 @@ namespace GalaxyQuest
 
         public static Point findMajority(Point[] A, long d)
         {
-            if(A == null || A.Length == 0)
+            if (A.Length == 0)
             {
-                return new Point(null, null);
+                return null;
             }
-            else if(A.Length == 1)
+            else if (A.Length == 1)
             {
                 return A[0];
             }
@@ -80,96 +74,34 @@ namespace GalaxyQuest
                 A1 = A.Take(A.Length / 2).ToArray();
                 A2 = A.Skip(A.Length / 2).ToArray();
 
-                Point y = new Point(null, null);
-                if (A1.Length > A2.Length)
-                {
-                    y = new Point(A1[A1.Length - 1].X, A1[A1.Length - 1].Y);
-                }
-                else if (A1.Length < A2.Length)
-                {
-                    y = new Point(A2[A2.Length - 1].X, A2[A2.Length - 1].Y);
-                }
+                Point x = findMajority(A1, d);
+                Point y = findMajority(A2, d);
 
-                Dictionary<Point, Point> pairs = new Dictionary<Point, Point>();
-
-                for(int i = 0; i < A1.Length; i++)
+                if (x == null && y == null)
                 {
-                    if (A1[i] == null)
+                    return null;
+                }
+                else if (x == null)
+                {
+                    int yCount = 0;
+                    foreach (Point p in A)
                     {
-                        if(A2[i] == null)
+                        if (distance(y, p) <= d)
                         {
-                            pairs.Add(new Point(null, null), new Point(null, null));
-                        }
-                        else
-                        {
-                            pairs.Add(new Point(null, null), A2[i]);
+                            yCount++;
                         }
                     }
-                    else if(A1[i] != null)
+
+                    if (yCount > 0)
                     {
-                        if (A2[i] == null)
-                        {
-                            pairs.Add(A1[i], new Point(null, null));
-                        }
-                        else
-                        {
-                            pairs.Add(A1[i], A2[i]);
-                        }
-                    }
-                }
-
-                Point[] APrime = new Point[A2.Length];
-                for(int i = 0; i < APrime.Length; i++)
-                {
-                    APrime[i] = new Point(null, null);
-                }
-
-                int count = 0;
-
-                foreach(KeyValuePair<Point, Point> pair in pairs)
-                {
-                    Point p1 = pair.Key;
-                    Point p2 = pair.Value;
-
-                    if((p1 == null && p2 == null) || (p1 != null && p2 != null))
-                    {
-                        if (distance(p1, p2) <= d)
-                        {
-                            APrime[count] = p2;
-                            count++;
-                        }
-                    }
-                }
-
-                Point x = findMajority(APrime, d);
-                if(x == null)
-                {
-                    if (A.Length % 2 != 0)
-                    {
-                        int yCount = 0;
-                        foreach (Point p in A)
-                        {
-                            if (distance(y, p) <= d)
-                            {
-                                yCount++;
-                            }
-                        }
-
-                        if (yCount > 0)
-                        {
-                            return new Point(null, yCount);
-                        }
-                        else
-                        {
-                            return new Point(null, null);
-                        }
+                        return new Point(null, yCount);
                     }
                     else
                     {
-                        return new Point(null, null);
+                        return null;
                     }
                 }
-                else
+                else if (y == null)
                 {
                     int xCount = 0;
                     foreach (Point p in A)
@@ -186,102 +118,39 @@ namespace GalaxyQuest
                     }
                     else
                     {
-                        return new Point(null, null);
+                        return null;
                     }
                 }
+                else
+                {
+                    int xCount = 0;
+                    int yCount = 0;
 
+                    foreach (Point p in A)
+                    {
+                        if (distance(x, p) <= d)
+                        {
+                            xCount++;
+                        }
+                        if (distance(y, p) <= d)
+                        {
+                            yCount++;
+                        }
+                    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                //Point x = findMajority(A1, d);
-                //Point y = findMajority(A2, d);
-
-                //if(x == null && y == null)
-                //{
-                //    return null;
-                //}
-                //else if(x == null)
-                //{
-                //    int yCount = 0;
-                //    foreach(Point p in A)
-                //    {
-                //        if(distance(y, p) <= d)
-                //        {
-                //            yCount++;
-                //        }
-                //    }
-
-                //    if(yCount > 0)
-                //    {
-                //        return new Point(0, yCount);
-                //    }
-                //    else
-                //    {
-                //        return null;
-                //    }
-                //}
-                //else if(y == null)
-                //{
-                //    int xCount = 0;
-                //    foreach (Point p in A)
-                //    {
-                //        if (distance(x, p) <= d)
-                //        {
-                //            xCount++;
-                //        }
-                //    }
-
-                //    if (xCount > 0)
-                //    {
-                //        return new Point(xCount, 0);
-                //    }
-                //    else
-                //    {
-                //        return null;
-                //    }
-                //}
-                //else
-                //{
-                //    int xCount = 0;
-                //    int yCount = 0;
-
-                //    foreach (Point p in A)
-                //    {
-                //        if (distance(x, p) <= d)
-                //        {
-                //            xCount++;
-                //        }
-                //        if (distance(y, p) <= d)
-                //        {
-                //            yCount++;
-                //        }
-                //    }
-
-                //    if(xCount > yCount)
-                //    {
-                //        return new Point(xCount, 0);
-                //    }
-                //    else if(yCount > xCount)
-                //    {
-                //        return new Point(0, yCount);
-                //    }
-                //    else
-                //    {
-                //        return null;
-                //    }
-                //}
+                    if (xCount > yCount)
+                    {
+                        return new Point(xCount, null);
+                    }
+                    else if (yCount > xCount)
+                    {
+                        return new Point(null, yCount);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
             }
         }
 
