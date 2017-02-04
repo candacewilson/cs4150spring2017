@@ -42,39 +42,61 @@ namespace GalaxyQuest
             {
                 Console.WriteLine("NO");
             }
-            else if (result.X == null)
-            {
-                if(result.Y > stars.Length / 2)
-                {
-                    Console.WriteLine(result.Y);
-                }
-                else
-                {
-                    Console.WriteLine("NO");
-                }
-            }
-            else if (result.Y == null)
-            {
-                if (result.X > stars.Length / 2)
-                {
-                    Console.WriteLine(result.X);
-                }
-                else
-                {
-                    Console.WriteLine("NO");
-                }
-            }
             else
             {
-                if (stars.Length / 2 < 1)
+                int majority = 0;
+                foreach (Point p in stars)
                 {
-                    Console.WriteLine(1);
+                    if (distance(result, p) <= d)
+                    {
+                        majority++;
+                    }
                 }
-                else
+
+                if (majority > stars.Length / 2)
                 {
-                    Console.WriteLine("NO");
+                    Console.WriteLine(majority);
                 }
             }
+
+
+
+
+
+
+            //else if (result.X == null)
+            //{
+            //    if(result.Y > stars.Length / 2)
+            //    {
+            //        Console.WriteLine(result.Y);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("NO");
+            //    }
+            //}
+            //else if (result.Y == null)
+            //{
+            //    if (result.X > stars.Length / 2)
+            //    {
+            //        Console.WriteLine(result.X);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("NO");
+            //    }
+            //}
+            //else
+            //{
+            //    if (1 > stars.Length / 2)
+            //    {
+            //        Console.WriteLine(1);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("NO");
+            //    }
+            //}
 
             Console.Read();
         }
@@ -115,7 +137,7 @@ namespace GalaxyQuest
 
                     if ((yCount > 0) && (yCount > A.Length / 2))
                     {
-                        return new Point(null, yCount);
+                        return y;
                     }
                     else
                     {
@@ -135,7 +157,7 @@ namespace GalaxyQuest
 
                     if ((xCount > 0) && (xCount > A.Length / 2))
                     {
-                        return new Point(xCount, null);
+                        return x;
                     }
                     else
                     {
@@ -161,11 +183,11 @@ namespace GalaxyQuest
 
                     if ((xCount > yCount) && (xCount > A.Length / 2))
                     {
-                        return new Point(xCount, null);
+                        return x;
                     }
                     else if ((yCount > xCount) && (yCount > A.Length / 2))
                     {
-                        return new Point(null, yCount);
+                        return y;
                     }
                     else
                     {
