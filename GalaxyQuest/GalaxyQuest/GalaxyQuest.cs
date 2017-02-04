@@ -26,7 +26,7 @@ namespace GalaxyQuest
                 else if (initializers == null)
                 {
                     initializers = input.Split();
-                    d = (int.Parse(initializers[0]))^2;
+                    d = (int)Math.Pow(int.Parse(initializers[0]), 2);
                     stars = new Point[int.Parse(initializers[1])];
                 }
                 else
@@ -164,7 +164,7 @@ namespace GalaxyQuest
         /// <returns></returns>
         public static long distance(Point s1, Point s2)
         {
-            return (s1.X - s2.X)^2 + (s1.Y - s2.Y)^2;
+            return (int)Math.Pow((s1.X - s2.X), 2) + (int)Math.Pow((s1.Y - s2.Y), 2);
         }
 
         public class Point
