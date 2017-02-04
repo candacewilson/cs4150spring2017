@@ -42,11 +42,11 @@ namespace GalaxyQuest
             {
                 Console.WriteLine("NO");
             }
-            else if(result.X == -1)
+            else if(result.X == null)
             {
                 Console.WriteLine(result.Y);
             }
-            else if(result.Y == -1)
+            else if(result.Y == null)
             {
                 Console.WriteLine(result.X);
             }
@@ -57,7 +57,6 @@ namespace GalaxyQuest
 
             Console.Read();
         }
-
 
         public static Point findMajority(Point[] A, int d)
         {
@@ -95,13 +94,12 @@ namespace GalaxyQuest
 
                     if(yCount > 0)
                     {
-                        return new Point(-1, yCount);
+                        return new Point(null, yCount);
                     }
                     else
                     {
                         return null;
                     }
-
                 }
                 else if(y == null)
                 {
@@ -116,7 +114,7 @@ namespace GalaxyQuest
 
                     if (xCount > 0)
                     {
-                        return new Point(xCount, -1);
+                        return new Point(xCount, null);
                     }
                     else
                     {
@@ -142,11 +140,11 @@ namespace GalaxyQuest
 
                     if(xCount > yCount)
                     {
-                        return new Point(xCount, -1);
+                        return new Point(xCount, null);
                     }
                     else if(yCount > xCount)
                     {
-                        return new Point(-1, yCount);
+                        return new Point(null, yCount);
                     }
                     else
                     {
@@ -164,26 +162,27 @@ namespace GalaxyQuest
         /// <returns></returns>
         public static long distance(Point s1, Point s2)
         {
-            return (int)Math.Pow((s1.X - s2.X), 2) + (int)Math.Pow((s1.Y - s2.Y), 2);
+            return (int)Math.Pow(((s1.X ?? default(int)) - (s2.X ?? default(int))), 2) 
+                + (int)Math.Pow(((s1.Y ?? default(int)) - (s2.Y ?? default(int))), 2);
         }
 
         public class Point
         {
-            private int x, y;
+            private int? x, y;
 
-            public Point(int x, int y)
+            public Point(int? x, int? y)
             {
                 this.x = x;
                 this.y = y;
             }
 
-            public int X
+            public int? X
             {
                 get { return x; }
                 set { x = value; }
             }
 
-            public int Y
+            public int? Y
             {
                 get { return y; }
                 set { y = value; }
