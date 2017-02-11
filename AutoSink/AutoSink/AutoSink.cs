@@ -139,7 +139,7 @@ namespace AutoSink
 
                 foreach (var city in cityAndHighways)
                 {
-                    if (city.Key == departureCity)
+                    if (city.Key.Equals(departureCity))
                     {
                         allTolls[city.Key] = 0;
                     }
@@ -158,7 +158,7 @@ namespace AutoSink
                     cheapestCity = cities[0];
                     cities.Remove(cheapestCity);
 
-                    if (cheapestCity == destinationCity)
+                    if (cheapestCity.Equals(destinationCity))
                     {
                         trip = new List<String>();
                         while (cheapestVisited.ContainsKey(cheapestCity))
