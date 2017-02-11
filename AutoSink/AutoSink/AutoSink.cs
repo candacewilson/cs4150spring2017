@@ -69,26 +69,31 @@ namespace AutoSink
             DAG dagonia = new DAG();
             Dictionary<String, int> tolls = null;
 
-            foreach (String city in highways.Keys)
+            foreach (String city in cities.Keys)
             {
                 tolls = new Dictionary<String, int>();
-                foreach (String destination in highways[city])
+                if (highways.Keys.Contains(city))
                 {
-                    tolls.Add(destination, cities[destination]);
+                    foreach (String destination in highways[city])
+                    {
+                        tolls.Add(destination, cities[destination]);
+                    }
                 }
                 dagonia.add(city, tolls);
             }
 
-            List<List<String>> paths = null;
+            List<List<String>> paths = new List<List<String>>();
+            List<String> path = null;
             foreach (String trip in proposedTrips)
             {
                 parsedInput = trip.Split();
-                paths.Add(dagonia.Dijkstras(parsedInput[0], parsedInput[1]));
+                path = dagonia.Dijkstras(parsedInput[0], parsedInput[1]);
+                paths.Add(path);
             }
 
             int cost;
 
-            for(int i = 0; i < paths.Count; i++)
+            for (int i = 0; i < paths.Count; i++)
             {
                 cost = 0;
                 parsedInput = proposedTrips[i].Split();
@@ -105,7 +110,7 @@ namespace AutoSink
                 }
                 else
                 {
-                    foreach(String city in paths[i])
+                    foreach (String city in paths[i])
                     {
                         cost += cities[city];
                     }
@@ -113,20 +118,7 @@ namespace AutoSink
                 }
             }
 
-            //DAG g = new DAG();
-            //g.add("A", new Dictionary<String, int>() { { "B", 7 }, { "C", 8 } });
-            //g.add("B", new Dictionary<String, int>() { { "F", 2 } });
-            //g.add("C", new Dictionary<String, int>() { { "F", 6 }, { "G", 4 } });
-            //g.add("D", new Dictionary<String, int>() { { "F", 8 } });
-            //g.add("E", new Dictionary<String, int>() { { "H", 1 } });
-            //g.add("F", new Dictionary<String, int>() { { "G", 9 }, { "H", 3 } });
-            //g.add("G", new Dictionary<String, int>() { { "H", 9 } });
-            //g.add("H", new Dictionary<String, int>());
-
-            //g.Dijkstras("A", "A").ForEach(x => Console.WriteLine(x));
-
             Console.Read();
-
         }
 
 
