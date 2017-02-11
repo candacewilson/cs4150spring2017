@@ -79,7 +79,7 @@ namespace AutoSink
                         tolls.Add(destination, cities[destination]);
                     }
                 }
-                dagonia.add(city, tolls);
+                dagonia.connectedHighways(city, tolls);
             }
 
             List<List<String>> paths = new List<List<String>>();
@@ -121,79 +121,75 @@ namespace AutoSink
             Console.Read();
         }
 
-
-
-
-
-
-
         private class DAG
         {
-            Dictionary<String, Dictionary<String, int>> cityAndHighways = new Dictionary<String, Dictionary<String, int>>();
+            private Dictionary<String, Dictionary<String, int>> cityAndHighways = new Dictionary<String, Dictionary<String, int>>();
 
-            public void add(String city, Dictionary<String, int> highways)
+            public void connectedHighways(String city, Dictionary<String, int> highways)
             {
                 cityAndHighways[city] = highways;
             }
 
-            public List<String> Dijkstras(String firstCity, String secondCity)
+            public List<String> Dijkstras(String departureCity, String destinationCity)
             {
-                var previous = new Dictionary<String, String>();
-                var distances = new Dictionary<String, int>();
-                var nodes = new List<String>();
+                Dictionary<String, String> cheapestVisited = new Dictionary<String, String>();
+                Dictionary<String, int> allTolls = new Dictionary<String, int>();
+                List<String> cities = new List<String>();
+                List<String> trip = null;
+                String cheapestCity;
+                int cityToll;
 
-                List<String> path = null;
-
-                foreach (var city in cityAndHighways)
+                foreach (KeyValuePair<String, Dictionary<String, int>> city in cityAndHighways)
                 {
-                    if (city.Key == firstCity)
+                    if(city.Key == departureCity)
                     {
-                        distances[city.Key] = 0;
+                        allTolls[city.Key] = 0;
                     }
                     else
                     {
-                        distances[city.Key] = int.MaxValue;
+                        allTolls[city.Key] = int.MaxValue;
                     }
 
-                    nodes.Add(city.Key);
+                    cities.Add(city.Key);
                 }
 
-                while (nodes.Count != 0)
+                while (cities.Count != 0)
                 {
-                    nodes.Sort((x, y) => distances[x] - distances[y]);
+                    cities.Sort((x, y) => allTolls[x] - allTolls[y]);
 
-                    var smallest = nodes[0];
-                    nodes.Remove(smallest);
+                    cheapestCity = cities[0];
+                    cities.Remove(cheapestCity);
 
-                    if (smallest == secondCity)
+                    if(cheapestCity == destinationCity)
                     {
-                        path = new List<String>();
-                        while (previous.ContainsKey(smallest))
+                        trip = new List<String>();
+                        while(cheapestVisited.ContainsKey(cheapestCity))
                         {
-                            path.Add(smallest);
-                            smallest = previous[smallest];
+                            trip.Add(cheapestCity);
+                            cheapestCity = cheapestVisited[cheapestCity];
                         }
 
                         break;
                     }
 
-                    if (distances[smallest] == int.MaxValue)
+                    if (allTolls[cheapestCity] == int.MaxValue)
                     {
                         break;
                     }
 
-                    foreach (var neighbor in cityAndHighways[smallest])
+                    foreach (KeyValuePair<String, int> city in cityAndHighways[cheapestCity])
                     {
-                        var alt = distances[smallest] + neighbor.Value;
-                        if (alt < distances[neighbor.Key])
+                        cityToll = allTolls[cheapestCity] + city.Value;
+
+                        if (cityToll < allTolls[city.Key])
                         {
-                            distances[neighbor.Key] = alt;
-                            previous[neighbor.Key] = smallest;
+                            allTolls[city.Key] = cityToll;
+                            cheapestVisited[city.Key] = cheapestCity;
                         }
                     }
                 }
 
-                return path;
+                return trip;
             }
         }
     }
