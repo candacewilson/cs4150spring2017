@@ -133,11 +133,11 @@ namespace AutoSink
                 Dictionary<String, String> cheapestVisited = new Dictionary<String, String>();
                 Dictionary<String, int> allTolls = new Dictionary<String, int>();
                 List<String> cities = new List<String>();
-                List<String> trip = null;
+                List<String> trip = new List<String>();
                 String cheapestCity;
                 int cityToll;
 
-                foreach (KeyValuePair<String, Dictionary<String, int>> city in cityAndHighways)
+                foreach (var city in cityAndHighways)
                 {
                     if (city.Key == departureCity)
                     {
@@ -175,7 +175,7 @@ namespace AutoSink
                         break;
                     }
 
-                    foreach (KeyValuePair<String, int> city in cityAndHighways[cheapestCity])
+                    foreach (var city in cityAndHighways[cheapestCity])
                     {
                         cityToll = allTolls[cheapestCity] + city.Value;
 
