@@ -17,6 +17,9 @@ namespace AutoSink
             String[] parsedInput;
             int initializer = 0;
             int count = 0;
+            int numOfCities = 0;
+            int numOfHighways = 0;
+            int numOfProposedTrips = 0;
 
             while (true)
             {
@@ -28,25 +31,37 @@ namespace AutoSink
                 {
                     if (cities == null)
                     {
-                        cities = new Dictionary<String, int>(initializer);
+                        if (1 <= initializer && initializer <= 2000)
+                        {
+                            cities = new Dictionary<String, int>(initializer);
+                            numOfCities = initializer;
+                        }
                     }
                     else if (highways == null)
                     {
-                        highways = new Dictionary<String, List<String>>(initializer);
+                        if (0 <= initializer && initializer <= 10000)
+                        {
+                            highways = new Dictionary<String, List<String>>(initializer);
+                            numOfHighways = initializer;
+                        }
                     }
                     else if (proposedTrips == null)
                     {
-                        proposedTrips = new String[initializer];
+                        if (1 <= initializer && initializer <= 8000)
+                        {
+                            proposedTrips = new String[initializer];
+                            numOfProposedTrips = initializer;
+                        }
                     }
                 }
                 else
                 {
-                    if (cities != null && highways == null && proposedTrips == null)
+                    if (cities != null && highways == null && proposedTrips == null && cities.Count <= numOfCities)
                     {
                         parsedInput = input.Split();
                         cities.Add(parsedInput[0], int.Parse(parsedInput[1]));
                     }
-                    else if (cities != null && highways != null && proposedTrips == null)
+                    else if (cities != null && highways != null && proposedTrips == null && highways.Count <= numOfHighways)
                     {
                         parsedInput = input.Split();
                         if (highways.ContainsKey(parsedInput[0]))
@@ -58,7 +73,7 @@ namespace AutoSink
                             highways.Add(parsedInput[0], new List<String> { parsedInput[1] });
                         }
                     }
-                    else if (cities != null && highways != null && proposedTrips != null)
+                    else if (cities != null && highways != null && proposedTrips != null && proposedTrips.Length <= numOfProposedTrips)
                     {
                         proposedTrips[count] = input;
                         count++;
@@ -139,7 +154,7 @@ namespace AutoSink
 
                 foreach (var city in cityAndHighways)
                 {
-                    if (city.Key.Equals(departureCity))
+                    if (city.Key == departureCity)
                     {
                         allTolls[city.Key] = 0;
                     }
@@ -158,7 +173,7 @@ namespace AutoSink
                     cheapestCity = cities[0];
                     cities.Remove(cheapestCity);
 
-                    if (cheapestCity.Equals(destinationCity))
+                    if (cheapestCity == destinationCity)
                     {
                         trip = new List<String>();
                         while (cheapestVisited.ContainsKey(cheapestCity))
