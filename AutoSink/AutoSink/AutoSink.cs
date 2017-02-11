@@ -13,12 +13,13 @@ namespace AutoSink
             String input;
             Dictionary<String, int> cities = null;
             Dictionary<String, List<String>> highways = null;
-            List<String> proposedTrips = null;
+            String[] proposedTrips = null;
             String[] parsedInput;
             int initializer = 0;
             int numOfCities = 0;
             int numOfHighways = 0;
             int numOfProposedTrips = 0;
+            int count = 0;
 
             while (true)
             {
@@ -48,7 +49,7 @@ namespace AutoSink
                     {
                         if (1 <= initializer && initializer <= 8000)
                         {
-                            proposedTrips = new List<String>(initializer);
+                            proposedTrips = new String[initializer];
                             numOfProposedTrips = initializer;
                         }
                     }
@@ -72,9 +73,10 @@ namespace AutoSink
                             highways.Add(parsedInput[0], new List<String> { parsedInput[1] });
                         }
                     }
-                    else if (cities != null && highways != null && proposedTrips != null && proposedTrips.Count <= numOfProposedTrips)
+                    else if (cities != null && highways != null && proposedTrips != null && proposedTrips.Length <= numOfProposedTrips)
                     {
-                        proposedTrips.Add(input);
+                        proposedTrips[count] = input;
+                        count++;
                     }
                 }
             }
