@@ -13,10 +13,10 @@ namespace AutoSink
             String input;
             Dictionary<String, int> cities = null;
             Dictionary<String, List<String>> highways = null;
-            List<String> proposedTrips = null;
+            String[] proposedTrips = null;
             String[] parsedInput;
             int initializer = 0;
-            List<String> results = null;
+            int count = 0;
 
             while (true)
             {
@@ -36,8 +36,7 @@ namespace AutoSink
                     }
                     else if (proposedTrips == null)
                     {
-                        proposedTrips = new List<String>(initializer);
-                        results = new List<String>(initializer);
+                        proposedTrips = new String[initializer];
                     }
                 }
                 else
@@ -61,7 +60,8 @@ namespace AutoSink
                     }
                     else if (cities != null && highways != null && proposedTrips != null)
                     {
-                        proposedTrips.Add(input);
+                        proposedTrips[count] = input;
+                        count++;
                     }
                 }
             }
@@ -83,12 +83,10 @@ namespace AutoSink
             }
 
             List<List<String>> paths = new List<List<String>>();
-            List<String> path = null;
             foreach (String trip in proposedTrips)
             {
                 parsedInput = trip.Split();
-                path = dagonia.Dijkstras(parsedInput[0], parsedInput[1]);
-                paths.Add(path);
+                paths.Add(dagonia.Dijkstras(parsedInput[0], parsedInput[1]));
             }
 
             int cost;
@@ -141,7 +139,7 @@ namespace AutoSink
 
                 foreach (KeyValuePair<String, Dictionary<String, int>> city in cityAndHighways)
                 {
-                    if(city.Key == departureCity)
+                    if (city.Key == departureCity)
                     {
                         allTolls[city.Key] = 0;
                     }
@@ -160,10 +158,10 @@ namespace AutoSink
                     cheapestCity = cities[0];
                     cities.Remove(cheapestCity);
 
-                    if(cheapestCity == destinationCity)
+                    if (cheapestCity == destinationCity)
                     {
                         trip = new List<String>();
-                        while(cheapestVisited.ContainsKey(cheapestCity))
+                        while (cheapestVisited.ContainsKey(cheapestCity))
                         {
                             trip.Add(cheapestCity);
                             cheapestCity = cheapestVisited[cheapestCity];
