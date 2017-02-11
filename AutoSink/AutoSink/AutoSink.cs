@@ -95,11 +95,11 @@ namespace AutoSink
                 dagonia.connectedHighways(city, tolls);
             }
 
-            List<List<String>> paths = new List<List<String>>();
+            List<String[]> paths = new List<String[]>();
             foreach (String trip in proposedTrips)
             {
-                parsedInput = trip.Split(); 
-                paths.Add(dagonia.Dijkstras(parsedInput[0], parsedInput[1]));
+                parsedInput = trip.Split();
+                paths.Add(dagonia.Dijkstras(parsedInput[0], parsedInput[1], numOfProposedTrips));
             }
 
             int cost;
@@ -108,7 +108,7 @@ namespace AutoSink
             {
                 cost = 0;
                 parsedInput = proposedTrips[i].Split();
-                if (paths[i].Count == 0)
+                if (paths[i].Count(s => s != null) == 0)
                 {
                     if (parsedInput[0].Equals(parsedInput[1]))
                     {
@@ -123,7 +123,10 @@ namespace AutoSink
                 {
                     foreach (String city in paths[i])
                     {
-                        cost += cities[city];
+                        if (city != null)
+                        {
+                            cost += cities[city];
+                        }
                     }
                     Console.WriteLine(cost);
                 }
@@ -141,14 +144,15 @@ namespace AutoSink
                 cityAndHighways[city] = highways;
             }
 
-            public List<String> Dijkstras(String departureCity, String destinationCity)
+            public String[] Dijkstras(String departureCity, String destinationCity, int length)
             {
                 Dictionary<String, String> cheapestVisited = new Dictionary<String, String>();
                 Dictionary<String, int> allTolls = new Dictionary<String, int>();
                 List<String> cities = new List<String>();
-                List<String> trip = new List<String>();
+                String[] trip = new String[length];
                 String cheapestCity;
                 int cityToll;
+                int count = 0;
 
                 foreach (var city in cityAndHighways)
                 {
@@ -173,11 +177,12 @@ namespace AutoSink
 
                     if (cheapestCity == destinationCity)
                     {
-                        trip = new List<String>();
+                        trip = new String[length];
                         while (cheapestVisited.ContainsKey(cheapestCity))
                         {
-                            trip.Add(cheapestCity);
+                            trip[count] = cheapestCity;
                             cheapestCity = cheapestVisited[cheapestCity];
+                            count++;
                         }
 
                         break;
