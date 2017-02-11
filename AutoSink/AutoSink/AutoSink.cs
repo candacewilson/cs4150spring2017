@@ -100,7 +100,7 @@ namespace AutoSink
             List<List<String>> paths = new List<List<String>>();
             foreach (String trip in proposedTrips)
             {
-                parsedInput = trip.Split();
+                parsedInput = trip.Split(); 
                 paths.Add(dagonia.Dijkstras(parsedInput[0], parsedInput[1]));
             }
 
