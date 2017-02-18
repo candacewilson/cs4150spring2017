@@ -79,7 +79,7 @@ namespace RumorMill
             dayHeard[rumorStarter] = 0;
 
             LinkedList<String> Q = new LinkedList<String>();
-            Q.AddFirst(rumorStarter);
+            Q.AddLast(rumorStarter);
 
             while(Q.Count > 0)
             {
@@ -90,7 +90,7 @@ namespace RumorMill
                 {
                     if(dayHeard[friend] == Double.PositiveInfinity)
                     {
-                        Q.AddFirst(friend);
+                        Q.AddLast(friend);
                         dayHeard[friend] = dayHeard[student] + 1;
                         heardFrom[friend] = student;
                     }
