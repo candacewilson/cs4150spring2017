@@ -17,6 +17,12 @@ namespace RumorMill
             bool gotFriendships = false;
             int initializer = 0;
             int count = 0;
+            int numOfStudents = 0;
+            int numOfFriendships = 0;
+            int numOfGossipers = 0;
+            int studentCount = 0;
+            int friendshipCount = 0;
+            int gossiperCount = 0;
 
             while (true)
             {
@@ -29,14 +35,17 @@ namespace RumorMill
                     if (studentsAndFriends == null)
                     {
                         studentsAndFriends = new Dictionary<String, LinkedList<String>>(initializer);
+                        numOfStudents = initializer;
                     }
-                    else if(!gotFriendships)
+                    else if(!gotFriendships && numOfStudents == studentCount)
                     {
                         gotFriendships = true;
+                        numOfFriendships = initializer;
                     }
-                    else if (rumorStarters == null)
+                    else if (rumorStarters == null && numOfFriendships == friendshipCount)
                     {
                         rumorStarters = new String[initializer];
+                        numOfGossipers = initializer;
                     }
                 }
                 else
@@ -44,17 +53,20 @@ namespace RumorMill
                     if (studentsAndFriends != null && !gotFriendships && rumorStarters == null)
                     {
                         studentsAndFriends[input] = new LinkedList<String>();
+                        studentCount++;
                     }
                     else if (studentsAndFriends != null && gotFriendships && rumorStarters == null)
                     {
                         parsedInput = input.Split();
                         studentsAndFriends[parsedInput[0]].AddLast(parsedInput[1]);
                         studentsAndFriends[parsedInput[1]].AddLast(parsedInput[0]);
+                        friendshipCount++;
                     }
                     else if (studentsAndFriends != null && gotFriendships && rumorStarters != null)
                     {
                         rumorStarters[count] = input;
                         count++;
+                        gossiperCount++;
                     }
                 }
             }
