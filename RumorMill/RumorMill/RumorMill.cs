@@ -16,11 +16,6 @@ namespace RumorMill
             String[] parsedInput;
             bool gotFriendships = false;
             int initializer = 0;
-            int count = 0;
-            int numOfStudents = 0;
-            int numOfFriendships = 0;
-            int studentCount = 0;
-            int friendshipCount = 0;
 
             while (true)
             {
@@ -33,54 +28,31 @@ namespace RumorMill
                     if (studentsAndFriends == null)
                     {
                         studentsAndFriends = new Dictionary<String, LinkedList<String>>(initializer);
-                        numOfStudents = initializer;
+                        for(int i = 0; i < initializer; i++)
+                        {
+                            input = Console.ReadLine();
+                            studentsAndFriends[input] = new LinkedList<String>();
+                        }
                     }
-                    else if(!gotFriendships && 0 < studentCount && studentCount == numOfStudents)
+                    else if(!gotFriendships)
                     {
                         gotFriendships = true;
-                        numOfFriendships = initializer;
+                        for (int i = 0; i < initializer; i++)
+                        {
+                            input = Console.ReadLine();
+                            parsedInput = input.Split();
+                            studentsAndFriends[parsedInput[0]].AddLast(parsedInput[1]);
+                            studentsAndFriends[parsedInput[1]].AddLast(parsedInput[0]);
+                        }
                     }
-                    else if (rumorStarters == null && 0 < friendshipCount && numOfFriendships == friendshipCount)
+                    else if (rumorStarters == null)
                     {
                         rumorStarters = new String[initializer];
-                    }
-
-                    else if (studentsAndFriends != null && !gotFriendships && rumorStarters == null)
-                    {
-                        studentsAndFriends[input] = new LinkedList<String>();
-                        studentCount++;
-                    }
-                    else if (studentsAndFriends != null && gotFriendships && rumorStarters == null)
-                    {
-                        parsedInput = input.Split();
-                        studentsAndFriends[parsedInput[0]].AddLast(parsedInput[1]);
-                        studentsAndFriends[parsedInput[1]].AddLast(parsedInput[0]);
-                        friendshipCount++;
-                    }
-                    else if (studentsAndFriends != null && gotFriendships && rumorStarters != null)
-                    {
-                        rumorStarters[count] = input;
-                        count++;
-                    }
-                }
-                else
-                {
-                    if (studentsAndFriends != null && !gotFriendships && rumorStarters == null)
-                    {
-                        studentsAndFriends[input] = new LinkedList<String>();
-                        studentCount++;
-                    }
-                    else if (studentsAndFriends != null && gotFriendships && rumorStarters == null)
-                    {
-                        parsedInput = input.Split();
-                        studentsAndFriends[parsedInput[0]].AddLast(parsedInput[1]);
-                        studentsAndFriends[parsedInput[1]].AddLast(parsedInput[0]);
-                        friendshipCount++;
-                    }
-                    else if (studentsAndFriends != null && gotFriendships && rumorStarters != null)
-                    {
-                        rumorStarters[count] = input;
-                        count++;
+                        for (int i = 0; i < initializer; i++)
+                        {
+                            input = Console.ReadLine();
+                            rumorStarters[i] = input;
+                        }
                     }
                 }
             }
