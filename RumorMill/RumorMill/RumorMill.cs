@@ -77,17 +77,20 @@ namespace RumorMill
             }
 
             dayHeard[rumorStarter] = 0;
-            Queue<String> Q = new Queue<String>();
-            Q.enq(0, rumorStarter);
 
-            while(!(Q.isEmpty))
+            LinkedList<String> Q = new LinkedList<String>();
+            Q.AddFirst(rumorStarter);
+
+            while(Q.Count > 0)
             {
-                String student = Q.deq();
+                String student = Q.First.Value;
+                Q.RemoveFirst();
+
                 foreach(String friend in studentBody[student])
                 {
                     if(dayHeard[friend] == Double.PositiveInfinity)
                     {
-                        Q.enq(0, friend);
+                        Q.AddFirst(friend);
                         dayHeard[friend] = dayHeard[student] + 1;
                         heardFrom[friend] = student;
                     }
@@ -104,98 +107,6 @@ namespace RumorMill
             }
 
             return sortedNames;
-        }
-
-        class Queue<String>
-        {
-            private MinHeap<Node> minHeap = new MinHeap<Node>();
-
-            public void enq(int priority, String item)
-            {
-                minHeap.Add(new Node() { minPriority = priority, min = item });
-            }
-
-            public String deq()
-            {
-                return minHeap.deleteMin().min;
-            }
-
-            public bool isEmpty
-            {
-                get { return minHeap.Count == 0; }
-            }
-
-            internal class Node : IComparable<Node>
-            {
-                public int minPriority;
-                public String min;
-
-                public int CompareTo(Node rhs)
-                {
-                    return minPriority.CompareTo(rhs.minPriority);
-                }
-            }
-        }
-
-        class MinHeap<String> where String : IComparable<String>
-        {
-            private List<String> heap = new List<String>();
-
-            public void Add(String item)
-            {
-                heap.Add(item);
-                int c = heap.Count - 1;
-
-                while (c > 0 && heap[c].CompareTo(heap[c/2]) == -1)
-                {
-                    String tmp = heap[c];
-                    heap[c] = heap[c/2];
-                    heap[c/2] = tmp;
-                    c = c/2;
-                }
-            }
-
-            public String deleteMin()
-            {
-                String minValue = heap[0];
-                heap[0] = heap[heap.Count - 1];
-                heap.RemoveAt(heap.Count - 1);
-
-                int c = 0;
-                while (c < heap.Count)
-                {
-                    int min = c;
-
-                    if ( ((2 * c + 1) < heap.Count) && (heap[2 * c + 1].CompareTo(heap[min]) == -1) )
-                    {
-                        min = 2 * c + 1;
-                    }
-
-                    if ( ((2 * c + 2) < heap.Count) && (heap[2 * c + 2].CompareTo(heap[min]) == -1) )
-                    {
-                        min = 2 * c + 2;
-                    }
-
-                    if (min == c)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        String temp = heap[c];
-                        heap[c] = heap[min];
-                        heap[min] = temp;
-                        c = min;
-                    }
-                }
-
-                return minValue;
-            }
-
-            public int Count
-            {
-                get { return heap.Count; }
-            }
         }
     }
 }
