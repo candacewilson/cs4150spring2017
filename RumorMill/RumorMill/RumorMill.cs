@@ -35,14 +35,32 @@ namespace RumorMill
                         studentsAndFriends = new Dictionary<String, LinkedList<String>>(initializer);
                         numOfStudents = initializer;
                     }
-                    else if(!gotFriendships && numOfStudents == studentCount)
+                    else if(!gotFriendships && 0 < studentCount && studentCount == numOfStudents)
                     {
                         gotFriendships = true;
                         numOfFriendships = initializer;
                     }
-                    else if (rumorStarters == null && numOfFriendships == friendshipCount)
+                    else if (rumorStarters == null && 0 < friendshipCount && numOfFriendships == friendshipCount)
                     {
                         rumorStarters = new String[initializer];
+                    }
+
+                    else if (studentsAndFriends != null && !gotFriendships && rumorStarters == null)
+                    {
+                        studentsAndFriends[input] = new LinkedList<String>();
+                        studentCount++;
+                    }
+                    else if (studentsAndFriends != null && gotFriendships && rumorStarters == null)
+                    {
+                        parsedInput = input.Split();
+                        studentsAndFriends[parsedInput[0]].AddLast(parsedInput[1]);
+                        studentsAndFriends[parsedInput[1]].AddLast(parsedInput[0]);
+                        friendshipCount++;
+                    }
+                    else if (studentsAndFriends != null && gotFriendships && rumorStarters != null)
+                    {
+                        rumorStarters[count] = input;
+                        count++;
                     }
                 }
                 else
