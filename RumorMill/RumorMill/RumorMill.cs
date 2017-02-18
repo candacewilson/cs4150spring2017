@@ -108,17 +108,6 @@ namespace RumorMill
 
         class Queue<String>
         {
-            internal class Node : IComparable<Node>
-            {
-                public int minPriority;
-                public String min;
-
-                public int CompareTo(Node rhs)
-                {
-                    return minPriority.CompareTo(rhs.minPriority);
-                }
-            }
-
             private MinHeap<Node> minHeap = new MinHeap<Node>();
 
             public void enq(int priority, String item)
@@ -134,6 +123,17 @@ namespace RumorMill
             public bool isEmpty
             {
                 get { return minHeap.Count == 0; }
+            }
+
+            internal class Node : IComparable<Node>
+            {
+                public int minPriority;
+                public String min;
+
+                public int CompareTo(Node rhs)
+                {
+                    return minPriority.CompareTo(rhs.minPriority);
+                }
             }
         }
 
