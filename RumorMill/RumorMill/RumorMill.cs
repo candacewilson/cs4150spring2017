@@ -19,10 +19,8 @@ namespace RumorMill
             int count = 0;
             int numOfStudents = 0;
             int numOfFriendships = 0;
-            int numOfGossipers = 0;
             int studentCount = 0;
             int friendshipCount = 0;
-            int gossiperCount = 0;
 
             while (true)
             {
@@ -45,7 +43,6 @@ namespace RumorMill
                     else if (rumorStarters == null && numOfFriendships == friendshipCount)
                     {
                         rumorStarters = new String[initializer];
-                        numOfGossipers = initializer;
                     }
                 }
                 else
@@ -66,7 +63,6 @@ namespace RumorMill
                     {
                         rumorStarters[count] = input;
                         count++;
-                        gossiperCount++;
                     }
                 }
             }
