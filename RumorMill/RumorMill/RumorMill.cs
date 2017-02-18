@@ -65,7 +65,6 @@ namespace RumorMill
             }
 
             Console.Read();
-
         }
 
         private static String[] BFS(Dictionary<String, LinkedList<String>> studentBody, String rumorStarter)
@@ -100,13 +99,11 @@ namespace RumorMill
             String[] sortedNames = new String[studentBody.Keys.Count];
             int count = 0;
 
-            foreach (var student in studentBody.OrderByDescending(pair => pair.Value))
+            foreach (var student in dayHeard.OrderBy(pair => pair.Value).ThenBy(pair => pair.Key))
             {
                 sortedNames[count] = student.Key;
                 count++;
             }
-
-            Array.Sort(sortedNames);
 
             return sortedNames;
         }
@@ -146,16 +143,17 @@ namespace RumorMill
         {
             private List<String> heap = new List<String>();
 
-            public void Add(String element)
+            public void Add(String item)
             {
-                heap.Add(element);
+                heap.Add(item);
                 int c = heap.Count - 1;
-                while (c > 0 && heap[c].CompareTo(heap[c / 2]) == -1)
+
+                while (c > 0 && heap[c].CompareTo(heap[c/2]) == -1)
                 {
                     String tmp = heap[c];
-                    heap[c] = heap[c / 2];
-                    heap[c / 2] = tmp;
-                    c = c / 2;
+                    heap[c] = heap[c/2];
+                    heap[c/2] = tmp;
+                    c = c/2;
                 }
             }
 
@@ -169,13 +167,21 @@ namespace RumorMill
                 while (c < heap.Count)
                 {
                     int min = c;
-                    if (2 * c + 1 < heap.Count && heap[2 * c + 1].CompareTo(heap[min]) == -1)
+
+                    if ( ((2 * c + 1) < heap.Count) && (heap[2 * c + 1].CompareTo(heap[min]) == -1) )
+                    {
                         min = 2 * c + 1;
-                    if (2 * c + 2 < heap.Count && heap[2 * c + 2].CompareTo(heap[min]) == -1)
+                    }
+
+                    if ( ((2 * c + 2) < heap.Count) && (heap[2 * c + 2].CompareTo(heap[min]) == -1) )
+                    {
                         min = 2 * c + 2;
+                    }
 
                     if (min == c)
+                    {
                         break;
+                    }
                     else
                     {
                         String temp = heap[c];
