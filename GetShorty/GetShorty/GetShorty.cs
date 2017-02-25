@@ -13,6 +13,7 @@ namespace GetShorty
             String input;
             LinkedList<Node>[] dungeon = null;
             String[] parsedInput;
+            List<Double> results = new List<Double>();
             int n;
             int m;
 
@@ -36,19 +37,35 @@ namespace GetShorty
                             break;
                         }
 
-                        dungeon = new LinkedList<Node>[m];
+                        dungeon = new LinkedList<Node>[n];
 
                         for (int i = 0; i < m; i++)
                         {
                             input = Console.ReadLine();
                             parsedInput = input.Split();
+
+                            if(dungeon[int.Parse(parsedInput[0])] == null)
+                            {
+                                dungeon[int.Parse(parsedInput[0])] = new LinkedList<Node>();
+                            }
+
+                            if (dungeon[int.Parse(parsedInput[1])] == null)
+                            {
+                                dungeon[int.Parse(parsedInput[1])] = new LinkedList<Node>();
+                            }
+
                             dungeon[int.Parse(parsedInput[0])].AddLast(new Node(int.Parse(parsedInput[1]), double.Parse(parsedInput[2])));
                             dungeon[int.Parse(parsedInput[1])].AddLast(new Node(int.Parse(parsedInput[0]), double.Parse(parsedInput[2])));
                         }
 
-                        Console.WriteLine(Dijkstras(dungeon, 0, n-1));
+                        results.Add(Dijkstras(dungeon, 0, n-1));
                     }
                 }
+            }
+
+            foreach(double r in results)
+            {
+                Console.WriteLine(r.ToString("N4"));
             }
 
             Console.Read();
@@ -61,14 +78,14 @@ namespace GetShorty
 
             for (int u = 0; u < G.Count(); u++)
             {
-                dist[u] = double.PositiveInfinity;
+                dist[u] = 0.0;
                 prev[u] = null;
             }
 
             dist[start] = 0;
 
-            MaxHeap PQ = new MaxHeap(G.Count());
-            PQ.insertOrChange(start, 0);
+            MaxHeap PQ = new MaxHeap();
+            PQ.insertOrChange(null, new Node(start, 0));
 
             while (!(PQ.isEmpty()))
             {
@@ -79,16 +96,18 @@ namespace GetShorty
                     int v = n.Intersection;
                     double w = n.Weight;
 
-                    if (dist[v] > dist[u] * w)
+                    if (dist[v] > dist[u] + w)
                     {
-                        dist[v] = dist[u] * w;
+                        Node oldNode = new Node(v, dist[v]);
+
+                        dist[v] = Math.Round((dist[u] + w), 4);
                         prev[v] = u;
-                        PQ.insertOrChange(v, dist[v]);
+                        PQ.insertOrChange(oldNode, new Node(v, dist[v]));
                     }
                 }
             }
 
-            return dist.Max();
+            return Math.Round(dist.Max(), 4);
         }
 
         public class Node
@@ -113,112 +132,117 @@ namespace GetShorty
                 get { return weight; }
                 set { weight = value; }
             }
+
+            public int CompareTo(Node node)
+            {
+                if (this.Weight < node.Weight)
+                    return -1;
+                else if (this.Weight > node.Weight)
+                    return 1;
+                return 0;
+            }
         }
 
         public class MaxHeap
         {
-            private Node[] Heap;
-            private int size;
-            private int max;
+            private IList<Node> heap;
 
-            private const int maxValue = 1;
-
-            public MaxHeap(int max)
+            public MaxHeap(Node[] elements = null)
             {
-                this.max = max;
-                this.size = 0;
-                Heap = new Node[this.max + 1];
-                Heap[0] = new Node(int.MaxValue, double.PositiveInfinity);
-            }
-
-            public void insertOrChange(int intersection, double weight)
-            {
-                Heap[intersection] = new Node(intersection, weight);
-            }
-
-            public void insert(Node element)
-            {
-                Heap[++size] = element;
-                int current = size;
-
-                while (Heap[current].Weight > Heap[parent(current)].Weight)
+                if (elements != null)
                 {
-                    swap(current, parent(current));
-                    current = parent(current);
-                }
-            }
-
-            public Node deleteMax()
-            {
-                Node popped = Heap[maxValue];
-                Heap[maxValue] = Heap[size--];
-                maxHeapify(maxValue);
-                return popped;
-            }
-
-            public void maxHeap()
-            {
-                for (int pos = (size / 2); pos >= 1; pos--)
-                {
-                    maxHeapify(pos);
-                }
-            }
-
-            private void maxHeapify(int pos)
-            {
-                if (!isLeaf(pos))
-                {
-                    if (Heap[pos].Weight < Heap[leftChild(pos)].Weight || Heap[pos].Weight < Heap[rightChild(pos)].Weight)
+                    heap = new List<Node>(elements);
+                    for (int i = elements.Length / 2; i >= 0; i--)
                     {
-                        if (Heap[leftChild(pos)].Weight > Heap[rightChild(pos)].Weight)
-                        {
-                            swap(pos, leftChild(pos));
-                            maxHeapify(leftChild(pos));
-                        }
-                        else
-                        {
-                            swap(pos, rightChild(pos));
-                            maxHeapify(rightChild(pos));
-                        }
+                        HeapifyDown(i);
                     }
                 }
+                else
+                {
+                    heap = new List<Node>();
+                }
+            }
+
+            public int Count
+            {
+                get { return heap.Count; }
             }
 
             public bool isEmpty()
             {
-                return Heap.Count() == 0;
+                return heap.Count == 0;
             }
 
-            private void swap(int fpos, int spos)
+            public Node deleteMax()
             {
-                Node tmp;
-                tmp = Heap[fpos];
-                Heap[fpos] = Heap[spos];
-                Heap[spos] = tmp;
-            }
+                var max = heap[0];
+                heap[0] = heap[Count - 1];
+                heap.RemoveAt(Count - 1);
 
-            private bool isLeaf(int pos)
-            {
-                if (pos >= (size / 2) && pos <= size)
+                if (Count > 0)
                 {
-                    return true;
+                    HeapifyDown(0);
                 }
-                return false;
+
+                return max;
             }
 
-            private int parent(int pos)
+            public void insertOrChange(Node oldNode, Node newNode)
             {
-                return pos / 2;
+                foreach(Node n in heap)
+                {
+                    if(n.Intersection == oldNode.Intersection)
+                    {
+                        if(n.Weight == oldNode.Weight)
+                        {
+                            oldNode = n;
+                            break;
+                        }
+                    }
+                }
+
+                heap.Remove(oldNode);
+                heap.Add(newNode);
+
+                HeapifyUp(Count - 1);
             }
 
-            private int leftChild(int pos)
+            private void HeapifyDown(int i)
             {
-                return (2 * pos);
+                var leftChild = (i * 2) + 1;
+                var rightChild = (i * 2) + 2;
+                var biggest = i;
+
+                if (leftChild < Count && heap[leftChild].CompareTo(heap[biggest]) > 0)
+                {
+                    biggest = leftChild;
+                }
+
+                if (rightChild < Count && heap[rightChild].CompareTo(heap[biggest]) > 0)
+                {
+                    biggest = rightChild;
+                }
+
+                if (biggest != i)
+                {
+                    Node old = heap[i];
+                    heap[i] = heap[biggest];
+                    heap[biggest] = old;
+                    HeapifyDown(biggest);
+                }
             }
 
-            private int rightChild(int pos)
+            private void HeapifyUp(int i)
             {
-                return (2 * pos) + 1;
+                var parent = (i - 1) / 2;
+                while (i > 0 && heap[i].CompareTo(heap[parent]) > 0)
+                {
+                    var temp = heap[parent];
+                    heap[parent] = heap[i];
+                    heap[i] = temp;
+                    i = parent;
+                    parent = (i - 1) / 2;
+                }
             }
         }
 
