@@ -79,9 +79,9 @@ namespace GetShorty
                     int v = n.Intersection;
                     double w = n.Weight;
 
-                    if (dist[v] > dist[u] + w)
+                    if (dist[v] > dist[u] * w)
                     {
-                        dist[v] = dist[u] + w;
+                        dist[v] = dist[u] * w;
                         prev[v] = u;
                         PQ.insertOrChange(v, dist[v]);
                     }
