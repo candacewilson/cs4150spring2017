@@ -14,6 +14,7 @@ namespace NumberTheory
             String input;
             String[] parsedInput;
             String operation;
+            List<String> results = new List<String>();
 
             while (true)
             {
@@ -29,26 +30,39 @@ namespace NumberTheory
                     switch (operation)
                     {
                         case "gcd":
-                            Console.WriteLine(gcd(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2])));
+                            results.Add(gcd(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2])).ToString());
                             break;
 
                         case "exp":
-                            Console.WriteLine(exp(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2]), BigInteger.Parse(parsedInput[3])));
+                            results.Add(exp(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2]), BigInteger.Parse(parsedInput[3])).ToString());
                             break;
 
                         case "inverse":
-                            Console.WriteLine(inverse(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2])));
+                            BigInteger? r = inverse(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2]));
+                            if(r == null)
+                            {
+                                results.Add("none");
+                            }
+                            else
+                            {
+                                results.Add(r.ToString());
+                            }
                             break;
 
                         case "isprime":
-                            Console.WriteLine(isPrime(BigInteger.Parse(parsedInput[1])));
+                            results.Add(isPrime(BigInteger.Parse(parsedInput[1])));
                             break;
 
                         case "key":
-                            key(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2]));
+                            results.Add(key(BigInteger.Parse(parsedInput[1]), BigInteger.Parse(parsedInput[2])));
                             break;
                     }
                 }
+            }
+
+            foreach(String r in results)
+            {
+                Console.WriteLine(r);
             }
 
             Console.Read();
@@ -86,62 +100,49 @@ namespace NumberTheory
             }
         }
 
-        public static Object inverse(BigInteger a, BigInteger N)
+        public static BigInteger? inverse(BigInteger a, BigInteger N)
         {
             if(gcd(a, N) != 1)
             {
-                return "none";
+                return null;
             }
             else
             {
+                //return exp(a, N - 2, N);
+
+
+
+
+
+
                 a = a % N;
-                for(BigInteger i = 2; i < N; i++)
+                for (BigInteger i = 2; i < N; i++)
                 {
-                    if((a*i) % N == 1)
+                    if ((a * i) % N == 1)
                     {
                         return i;
                     }
                 }
 
                 return null;
-
-
-
-                //BigInteger i = N;
-                //BigInteger v = 0;
-                //BigInteger d = 1;
-
-                //while (a > 0)
-                //{
-                //    BigInteger t = i / a;
-                //    BigInteger x = a;
-                //    d = v - (t * x);
-                //    v = x;
-                //}
-
-                //v = v % N;
-                //if(v < 0)
-                //{
-                //    return (v + N) % N;
-                //}
             }
         }
 
-        public static bool isPrime(BigInteger p)
+        public static String isPrime(BigInteger p)
         {
             int[] list = new int[] { 2, 3, 5 };
             foreach(int a in list)
             {
-                if(Math.Pow(a, (double)p-1) != 1)
+                if(inverse((BigInteger)Math.Pow(a, (double)(p-1)), p) != 1)
                 {
-                    return false;
+                    return "no";
                 }
             }
 
-            return true;
+            return "yes";
         }
 
-        public static void key(BigInteger p, BigInteger q)
+        public static String key(BigInteger p, BigInteger q)
         {
             BigInteger N = p * q;
             BigInteger phi = (p - 1) * (q - 1);
@@ -158,7 +159,7 @@ namespace NumberTheory
 
             BigInteger d = (BigInteger)inverse(e, phi);
 
-            Console.WriteLine(String.Join(" ", new BigInteger[] { N, e, d }));
+            return N.ToString() + " " + e.ToString() + " " + d.ToString();
         }
     }
 }
