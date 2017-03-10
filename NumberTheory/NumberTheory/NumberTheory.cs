@@ -108,29 +108,49 @@ namespace NumberTheory
             }
             else
             {
-                BigInteger v = N;
-                BigInteger w = 0;
-                BigInteger x = 1;
 
-                while (a > 0)
+                a = modulo(a, N);
+                for (BigInteger i = 1; i < N; i++)
                 {
-                    BigInteger y = v / a;
-                    BigInteger z = a;
-                    a = v % z;
-                    v = z;
-                    z = x;
-                    x = w - y * z;
-                    w = z;
+                    if (modulo(a * i, N) == 1)
+                    {
+                        return i;
+                    }
                 }
+                return 0;
 
-                w %= N;
 
-                if (w < 0)
-                {
-                    w = (w + N) % N;
-                }
 
-                return w;
+
+
+
+
+
+
+
+                //BigInteger v = N;
+                //BigInteger w = 0;
+                //BigInteger x = 1;
+
+                //while (a > 0)
+                //{
+                //    BigInteger y = v / a;
+                //    BigInteger z = a;
+                //    a = v % z;
+                //    v = z;
+                //    z = x;
+                //    x = w - y * z;
+                //    w = z;
+                //}
+
+                //w %= N;
+
+                //if (w < 0)
+                //{
+                //    w = (w + N) % N;
+                //}
+
+                //return w;
             }
         }
 
@@ -163,6 +183,17 @@ namespace NumberTheory
             }
 
             return result;
+        }
+
+        private static BigInteger modulo(BigInteger n, BigInteger p)
+        {
+            BigInteger r = n % p;
+            if (((p > 0) && (r < 0)) || ((p < 0) && (r > 0)))
+            {
+                r += p;
+            }
+
+            return r;
         }
 
         public static String key(BigInteger p, BigInteger q)
