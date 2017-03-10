@@ -139,8 +139,7 @@ namespace NumberTheory
             int[] list = new int[] { 2, 3, 5 };
             foreach(int a in list)
             {
-                //if (inverse(powerOf(a, (p - 1)), p) != 1)
-                if (inverse(BigInteger.Pow(a, (int)p-1), p) != 1)
+                if (inverse(powerOf(a, (p - 1)), p) != 1)
                 {
                         return "no";
                 }
