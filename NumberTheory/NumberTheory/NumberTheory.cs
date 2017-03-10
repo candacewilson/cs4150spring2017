@@ -139,13 +139,28 @@ namespace NumberTheory
             int[] list = new int[] { 2, 3, 5 };
             foreach(int a in list)
             {
-                if(inverse((BigInteger)Math.Pow(a, (double)(p-1)), p) != 1)
+                if(inverse(powerOf(a, (p-1)), p) != 1)
                 {
                     return "no";
                 }
             }
 
             return "yes";
+        }
+
+        private static BigInteger powerOf(BigInteger a, BigInteger b)
+        {
+            BigInteger result = 1;
+            while (b > 0)
+            {
+                if ((b & 1) != 0)
+                {
+                    result *= a;
+                }
+                b >>= 1;
+                a *= a;
+            }
+            return result;
         }
 
         public static String key(BigInteger p, BigInteger q)
