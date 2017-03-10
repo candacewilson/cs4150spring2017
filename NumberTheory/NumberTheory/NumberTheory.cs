@@ -108,23 +108,29 @@ namespace NumberTheory
             }
             else
             {
-                //return exp(a, N - 2, N);
+                BigInteger v = N;
+                BigInteger w = 0;
+                BigInteger x = 1;
 
-
-
-
-
-
-                a = a % N;
-                for (BigInteger i = 2; i < N; i++)
+                while (a > 0)
                 {
-                    if ((a * i) % N == 1)
-                    {
-                        return i;
-                    }
+                    BigInteger y = v / a;
+                    BigInteger z = a;
+                    a = v % z;
+                    v = z;
+                    z = x;
+                    x = w - y * z;
+                    w = z;
                 }
 
-                return null;
+                w %= N;
+
+                if (w < 0)
+                {
+                    w = (w + N) % N;
+                }
+
+                return w;
             }
         }
 
