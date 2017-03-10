@@ -151,15 +151,17 @@ namespace NumberTheory
         private static BigInteger powerOf(BigInteger a, BigInteger b)
         {
             BigInteger result = 1;
-            while (b > 0)
+            while (b != 0)
             {
-                if ((b & 1) != 0)
+                if ((b & 1) == 1)
                 {
                     result *= a;
-                }
-                b >>= 1;
+                } 
+
                 a *= a;
+                b >>= 1;
             }
+
             return result;
         }
 
