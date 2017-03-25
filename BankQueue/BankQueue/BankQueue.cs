@@ -13,12 +13,7 @@ namespace BankQueue
             String input;
             String[] parsedInput;
             Dictionary<int, List<int>> timeAndMoney = new Dictionary<int, List<int>>();
-            int N;
-            int T;
-            int SwedishCrowns;
-            int waitTime;
-            int longestWait;
-            int MAX;
+            int N, T, SwedishCrowns, waitTime, longestWaitTime, MAX;
             int result = 0;
             int[] sameWaitTime;
 
@@ -42,7 +37,7 @@ namespace BankQueue
 
                         if (!(timeAndMoney.ContainsKey(waitTime)))
                         {
-                            timeAndMoney[waitTime] = new List<int>(SwedishCrowns);
+                            timeAndMoney[waitTime] = new List<int>() { SwedishCrowns };
                         }
                         else
                         {
@@ -50,31 +45,31 @@ namespace BankQueue
                         }
                     }
 
-                    longestWait = timeAndMoney.Keys.Max();
+                    longestWaitTime = timeAndMoney.Keys.Max();
                     MAX = timeAndMoney.Keys.Max();
 
                     for (int i = 0; i <= MAX; i++)
                     {
-                        if (longestWait != 0)
+                        if (longestWaitTime != 0)
                         {
-                            result += timeAndMoney[longestWait].Max();
-                            if (timeAndMoney[longestWait].Count > 1)
+                            result += timeAndMoney[longestWaitTime].Max();
+                            if (timeAndMoney[longestWaitTime].Count > 1)
                             {
-                                timeAndMoney[longestWait].Remove(timeAndMoney[longestWait].Max());
-                                sameWaitTime = timeAndMoney[longestWait].ToArray();
+                                timeAndMoney[longestWaitTime].Remove(timeAndMoney[longestWaitTime].Max());
+                                sameWaitTime = timeAndMoney[longestWaitTime].ToArray();
                             }
                             else
                             {
                                 sameWaitTime = new int[] { 0 };
                             }
 
-                            if (!(timeAndMoney.ContainsKey(longestWait - 1)))
+                            if (!(timeAndMoney.ContainsKey(longestWaitTime - 1)))
                             {
-                                timeAndMoney[longestWait - 1] = sameWaitTime.ToList();
+                                timeAndMoney[longestWaitTime - 1] = sameWaitTime.ToList();
                             }
 
-                            timeAndMoney[longestWait - 1].AddRange(sameWaitTime.ToArray());
-                            longestWait--;
+                            timeAndMoney[longestWaitTime - 1].AddRange(sameWaitTime.ToArray());
+                            longestWaitTime--;
                         }
                         else
                         {
