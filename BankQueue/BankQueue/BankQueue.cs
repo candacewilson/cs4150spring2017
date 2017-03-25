@@ -13,7 +13,7 @@ namespace BankQueue
             String input;
             String[] parsedInput;
             Dictionary<int, List<int>> timeAndMoney = new Dictionary<int, List<int>>();
-            int N, T, SwedishCrowns, waitTime, longestWaitTime, MAX;
+            int N, SwedishCrowns, waitTime, longestWaitTime, MAX;
             int result = 0;
             int[] sameWaitTime;
 
@@ -27,7 +27,6 @@ namespace BankQueue
                 {
                     parsedInput = input.Split();
                     N = int.Parse(parsedInput[0]);
-                    T = int.Parse(parsedInput[1]);
 
                     for (int i = 0; i < N; i++)
                     {
