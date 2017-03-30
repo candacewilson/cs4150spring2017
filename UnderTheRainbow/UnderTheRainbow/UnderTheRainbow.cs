@@ -51,7 +51,7 @@ namespace UnderTheRainbow
 
             for(int i = hotels.Length - 1; i > start; i--)
             {
-                calculatedPenalty = (int)Math.Pow(400 - hotels[i] - hotels[start], 2) + MinimumPenalty(hotels, i, cache);
+                calculatedPenalty = (int)Math.Pow(hotels[i] - hotels[start] - 400, 2) + MinimumPenalty(hotels, i, cache);
                 penalty = Math.Min(penalty, calculatedPenalty);
             }
 
