@@ -45,56 +45,66 @@ namespace NarrowArtGallery
             Console.Read();
         }
 
-        /// <summary>
-        /// 
-        /// Requires the existence of an N x 2 values array.
-        /// Requires that k ≤ N - r.
-        /// Requires that 0 ≤ r ≤ N
-        /// Requires that uncloseableRoom = -1, 0, or 1
-        /// Returns the maximum value that can be obtained from rows r through N-1
-        /// when k rooms are closed, subject to this restriction:
-        ///     If uncloseableRoom is 0, the room in column 0 of row r cannot be closed;
-        ///     If uncloseableRoom is 1, the room in column 1 of row r cannot be closed;
-        ///     If uncloseableRoom is -1, either room of row i may be closed if desired.
-        /// 
-        /// </summary>
-        /// <param name="r"> Current Row </param>
-        /// <param name="unclosableRoom"> Room must be open </param>
-        /// <param name="k"> Rooms to close </param>
-        /// <returns></returns>
         public static int maxValue(int r, int unclosableRoom, int k, int[,] values)
         {
             int N = values.Length / 2;
+            int A, B = 0;
+
+            if(r == N)
+            {
+                if(unclosableRoom == 0)
+                {
+                    return values[r, 0];
+                }
+
+                if (unclosableRoom == 1)
+                {
+                    return values[r, 1];
+                }
+
+                if (unclosableRoom == -1)
+                {
+                    return values[r, 0] + values[r, 1];
+                }
+            }
 
             if(k == N - r)
             {
+                A = values[r, 0] + maxValue(r + 1, 0, k - 1, values);
+                B = values[r, 1] + maxValue(r + 1, 1, k - 1, values);
+
+                if (unclosableRoom == 0)
+                {
+                    return A;
+                }
+
+                if (unclosableRoom == 1)
+                {
+                    return B;
+                }
+
                 if (unclosableRoom == -1)
                 {
-                    // # 3 & 4
-                }
-                else if (unclosableRoom == 0)
-                {
-                    return values[r, 0] + maxValue(r+1, 0, k-1, values);
-                }
-                else if (unclosableRoom == 1)
-                {
-                    return values[r, 1] + maxValue(r+1, 1, k-1, values);
+                    return Math.Max(A, B); 
                 }
             }
 
             if(k < N - r)
             {
+                A = values[r, 0] + maxValue(r + 1, 0, k - 1, values);
+                B = values[r, 1] + maxValue(r + 1, 1, k - 1, values);
+
                 if (unclosableRoom == -1)
                 {
 
                 }
                 else if (unclosableRoom == 0)
                 {
-
+                    return values[r, 0] + maxValue(r + 1, 0, k-1, values);
                 }
                 else if (unclosableRoom == 1)
                 {
-
+                    return values[r, 1] + maxValue(r + 1, 1, k-1, values);
                 }
             }
         }
