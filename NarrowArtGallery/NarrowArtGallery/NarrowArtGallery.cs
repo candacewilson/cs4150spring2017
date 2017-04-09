@@ -47,24 +47,24 @@ namespace NarrowArtGallery
 
         public static int maxValue(int r, int unclosableRoom, int k, int[,] values)
         {
-            int N = values.Length / 2;
-            int A, B = 0;
+            int N = values.Length / 2; // Length returns ALL elements in values (2N)
+            int A, B, C = 0;
 
             if(r == N)
             {
                 if(unclosableRoom == 0)
                 {
-                    return values[r, 0];
+                    return values[r-1, 0];
                 }
 
                 if (unclosableRoom == 1)
                 {
-                    return values[r, 1];
+                    return values[r-1, 1];
                 }
 
                 if (unclosableRoom == -1)
                 {
-                    return values[r, 0] + values[r, 1];
+                    return values[r-1, 0] + values[r-1, 1];
                 }
             }
 
@@ -93,20 +93,25 @@ namespace NarrowArtGallery
             {
                 A = values[r, 0] + maxValue(r + 1, 0, k - 1, values);
                 B = values[r, 1] + maxValue(r + 1, 1, k - 1, values);
+                C = values[r, 0] + values[r, 1] + maxValue(r + 1, -1, k, values);
 
                 if (unclosableRoom == -1)
                 {
-
+                    return Math.Max(A, Math.Max(B, C));
                 }
-                else if (unclosableRoom == 0)
+
+                if (unclosableRoom == 0)
                 {
                     return values[r, 0] + maxValue(r + 1, 0, k-1, values);
                 }
-                else if (unclosableRoom == 1)
+
+                if (unclosableRoom == 1)
                 {
                     return values[r, 1] + maxValue(r + 1, 1, k-1, values);
                 }
             }
+
+            return 0;
         }
     }
 }
