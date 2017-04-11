@@ -11,10 +11,11 @@ namespace SpidermansWorkout
         static void Main(string[] args)
         {
             String input;
-            String[] parsedInput;
             int[] distances = null;
+            String[] results = null;
             int N = -1;
             int M;
+            int count = 0;
 
             while (true)
             {
@@ -27,19 +28,21 @@ namespace SpidermansWorkout
                     if (N == -1)
                     {
                         N = int.Parse(input);
+                        results = new String[N];
+                        continue;
                     }
 
-                    M = int.Parse(Console.ReadLine());
+                    M = int.Parse(input);
+                    distances = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
 
-                    distances = new int[M];
-
-                    for(int i = 0; i < M; i++)
-                    {
-                        distances[i] = int.Parse(Console.ReadLine());
-                    }
-
-                    Console.WriteLine(WerkIt(distances));
+                    results[count] = WerkIt(distances);
+                    count++;
                 }
+            }
+
+            foreach(String result in results)
+            {
+                Console.WriteLine(result);
             }
 
             Console.Read();
