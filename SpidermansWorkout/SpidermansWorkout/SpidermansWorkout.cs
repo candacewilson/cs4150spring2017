@@ -14,7 +14,6 @@ namespace SpidermansWorkout
             int[] distances = null;
             String[] results = null;
             int N = -1;
-            int M;
             int count = 0;
 
             while (true)
@@ -32,7 +31,6 @@ namespace SpidermansWorkout
                         continue;
                     }
 
-                    M = int.Parse(input);
                     distances = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
 
                     results[count] = WerkIt(distances);
