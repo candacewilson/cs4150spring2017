@@ -11,9 +11,10 @@ namespace GetShorty
         static void Main(string[] args)
         {
             String input;
-            LinkedList<Node>[] dungeon = null;
             String[] parsedInput;
-            List<Double> results = new List<Double>();
+            List<String> results = new List<String>();
+            Dungeon dungeon = new Dungeon();
+            Dictionary<String, Intersection> intersections = new Dictionary<String, Intersection>();
             int n;
             int m;
 
@@ -37,214 +38,154 @@ namespace GetShorty
                             break;
                         }
 
-                        dungeon = new LinkedList<Node>[n];
+                        for (int i = 0; i < n; i++)
+                        {
+                            Intersection newIntersection = new Intersection(i);
+                            intersections[i.ToString()] = newIntersection;
+                        }
 
                         for (int i = 0; i < m; i++)
                         {
                             input = Console.ReadLine();
                             parsedInput = input.Split();
-
-                            if(dungeon[int.Parse(parsedInput[0])] == null)
-                            {
-                                dungeon[int.Parse(parsedInput[0])] = new LinkedList<Node>();
-                            }
-
-                            if (dungeon[int.Parse(parsedInput[1])] == null)
-                            {
-                                dungeon[int.Parse(parsedInput[1])] = new LinkedList<Node>();
-                            }
-
-                            dungeon[int.Parse(parsedInput[0])].AddLast(new Node(int.Parse(parsedInput[1]), double.Parse(parsedInput[2])));
-                            dungeon[int.Parse(parsedInput[1])].AddLast(new Node(int.Parse(parsedInput[0]), double.Parse(parsedInput[2])));
+                            intersections[parsedInput[0]].addCorridor(intersections, parsedInput[0], parsedInput[1], float.Parse(parsedInput[2]));
                         }
 
-                        results.Add(Dijkstras(dungeon, 0, n-1));
+                        foreach (String key in intersections.Keys)
+                        {
+                            dungeon.addIntersection(key, intersections[key].GetAllCorridors());
+                        }
+
+                        List<String> Path = dungeon.Dijkstras("0", (n - 1).ToString());
+                        String startingIntersection = "0";
+                        float totalFactor = 1.0000f;
+
+                        foreach (String corridor in Path)
+                        {
+                            Dictionary<String, float> corridors = intersections[startingIntersection].GetAllCorridors();
+                            totalFactor = totalFactor * corridors[corridor];
+                            startingIntersection = corridor;
+                        }
+
+                        Math.Round((Decimal)totalFactor, 4, MidpointRounding.AwayFromZero);
+                        results.Add(Math.Round((Decimal)totalFactor, 4, MidpointRounding.AwayFromZero).ToString("n4"));
                     }
                 }
             }
 
-            foreach(double r in results)
+            foreach (String value in results)
             {
-                Console.WriteLine(r.ToString("N4"));
+                Console.WriteLine(value);
             }
 
             Console.Read();
         }
 
-        public static double Dijkstras(LinkedList<Node>[] G, int start, int end)
-        {
-            double[] dist = new double[G.Count()];
-            int?[] prev = new int?[G.Count()];
-
-            for (int u = 0; u < G.Count(); u++)
-            {
-                dist[u] = 0.0;
-                prev[u] = null;
-            }
-
-            dist[start] = 0;
-
-            MaxHeap PQ = new MaxHeap();
-            PQ.insertOrChange(null, new Node(start, 0));
-
-            while (!(PQ.isEmpty()))
-            {
-                Node uVertex = PQ.deleteMax();
-                foreach (Node n in G[uVertex.Intersection])
-                {
-                    int u = uVertex.Intersection;
-                    int v = n.Intersection;
-                    double w = n.Weight;
-
-                    if (dist[v] > dist[u] + w)
-                    {
-                        Node oldNode = new Node(v, dist[v]);
-
-                        dist[v] = Math.Round((dist[u] + w), 4);
-                        prev[v] = u;
-                        PQ.insertOrChange(oldNode, new Node(v, dist[v]));
-                    }
-                }
-            }
-
-            return Math.Round(dist.Max(), 4);
-        }
-
-        public class Node
+        public class Intersection
         {
             private int intersection;
-            private double weight;
+            private Dictionary<String, float> corridors = new Dictionary<String, float>();
 
-            public Node(int intersection, double weight)
+            public Intersection(int intersection)
             {
                 this.intersection = intersection;
-                this.weight = weight;
             }
 
-            public int Intersection
+            public void addCorridor(Dictionary<String, Intersection> intersections, String source, String target, float factor)
             {
-                get { return intersection; }
-                set { intersection = value; }
+                if (corridors.ContainsKey(target) || intersections[target].corridors.ContainsKey(source))
+                {
+                    if (corridors[target] < factor)
+                    {
+                        corridors[target] = factor;
+                        intersections[target].corridors[source] = factor;
+                    }
+
+                    if (intersections[target].corridors[source] < factor)
+                    {
+                        intersections[target].corridors[source] = factor;
+                    }
+                }
+
+                corridors[target] = factor;
+                intersections[target].corridors[source] = factor;
             }
 
-            public double Weight
+            public Dictionary<String, float> GetAllCorridors()
             {
-                get { return weight; }
-                set { weight = value; }
-            }
-
-            public int CompareTo(Node node)
-            {
-                if (this.Weight < node.Weight)
-                    return -1;
-                else if (this.Weight > node.Weight)
-                    return 1;
-                return 0;
+                return corridors;
             }
         }
 
-        public class MaxHeap
+        public class Dungeon
         {
-            private IList<Node> heap;
+            Dictionary<String, Dictionary<String, float>> intersectionsAndCorridors = new Dictionary<String, Dictionary<String, float>>();
 
-            public MaxHeap(Node[] elements = null)
+            public void addIntersection(String intersection, Dictionary<String, float> corridors)
             {
-                if (elements != null)
+                intersectionsAndCorridors[intersection] = corridors;
+            }
+
+            public List<String> Dijkstras(String sourceIntersection, String targetIntersection)
+            {
+                var prev = new Dictionary<String, String>();
+                var factors = new Dictionary<String, float>();
+                var intersections = new List<String>();
+
+                List<String> path = null;
+
+                foreach (var intersection in intersectionsAndCorridors)
                 {
-                    heap = new List<Node>(elements);
-                    for (int i = elements.Length / 2; i >= 0; i--)
+                    if (intersection.Key == sourceIntersection)
                     {
-                        HeapifyDown(i);
+                        factors[intersection.Key] = 1;
                     }
-                }
-                else
-                {
-                    heap = new List<Node>();
-                }
-            }
-
-            public int Count
-            {
-                get { return heap.Count; }
-            }
-
-            public bool isEmpty()
-            {
-                return heap.Count == 0;
-            }
-
-            public Node deleteMax()
-            {
-                var max = heap[0];
-                heap[0] = heap[Count - 1];
-                heap.RemoveAt(Count - 1);
-
-                if (Count > 0)
-                {
-                    HeapifyDown(0);
-                }
-
-                return max;
-            }
-
-            public void insertOrChange(Node oldNode, Node newNode)
-            {
-                foreach(Node n in heap)
-                {
-                    if(n.Intersection == oldNode.Intersection)
+                    else
                     {
-                        if(n.Weight == oldNode.Weight)
+                        factors[intersection.Key] = float.MinValue;
+                    }
+
+                    intersections.Add(intersection.Key);
+                }
+
+                while (intersections.Count != 0)
+                {
+                    intersections.OrderBy(a => a).ToArray();
+
+                    var nextIntersection = intersections[0];
+                    intersections.Remove(nextIntersection);
+
+                    if (nextIntersection == targetIntersection)
+                    {
+                        path = new List<String>();
+                        while (prev.ContainsKey(nextIntersection))
                         {
-                            oldNode = n;
-                            break;
+                            path.Add(nextIntersection);
+                            nextIntersection = prev[nextIntersection];
+                        }
+
+                        break;
+                    }
+
+                    if (factors[nextIntersection] == float.MinValue)
+                    {
+                        break;
+                    }
+
+                    foreach (var neighbor in intersectionsAndCorridors[nextIntersection])
+                    {
+                        var alt = factors[nextIntersection] * neighbor.Value;
+                        if (alt > factors[neighbor.Key])
+                        {
+                            factors[neighbor.Key] = alt;
+                            prev[neighbor.Key] = nextIntersection;
                         }
                     }
                 }
 
-                heap.Remove(oldNode);
-                heap.Add(newNode);
-
-                HeapifyUp(Count - 1);
-            }
-
-            private void HeapifyDown(int i)
-            {
-                var leftChild = (i * 2) + 1;
-                var rightChild = (i * 2) + 2;
-                var biggest = i;
-
-                if (leftChild < Count && heap[leftChild].CompareTo(heap[biggest]) > 0)
-                {
-                    biggest = leftChild;
-                }
-
-                if (rightChild < Count && heap[rightChild].CompareTo(heap[biggest]) > 0)
-                {
-                    biggest = rightChild;
-                }
-
-                if (biggest != i)
-                {
-                    Node old = heap[i];
-                    heap[i] = heap[biggest];
-                    heap[biggest] = old;
-                    HeapifyDown(biggest);
-                }
-            }
-
-            private void HeapifyUp(int i)
-            {
-                var parent = (i - 1) / 2;
-                while (i > 0 && heap[i].CompareTo(heap[parent]) > 0)
-                {
-                    var temp = heap[parent];
-                    heap[parent] = heap[i];
-                    heap[i] = temp;
-                    i = parent;
-                    parent = (i - 1) / 2;
-                }
+                path.Reverse();
+                return path;
             }
         }
-
     }
 }
