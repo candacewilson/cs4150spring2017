@@ -15,7 +15,7 @@ namespace GetShorty
             List<double> results = new List<double>();
             int n;
             int m;
-            List<KeyValuePair<int, double>>[] dungeon;
+            Dictionary<int, List<KeyValuePair<int, double>>> dungeon;
 
             while (true)
             {
@@ -37,7 +37,7 @@ namespace GetShorty
                             break;
                         }
 
-                        dungeon = new List<KeyValuePair<int, double>>[n];
+                        dungeon = new Dictionary<int, List<KeyValuePair<int, double>>>(n);
                         for (int i = 0; i < m; i++)
                         {
                             parsedInput = Console.ReadLine().Split();
@@ -45,21 +45,21 @@ namespace GetShorty
                             int y = int.Parse(parsedInput[1]);
                             double factor = double.Parse(parsedInput[2]);
 
-                            if(dungeon[x] == null)
+                            if(!(dungeon.ContainsKey(x)))
                             {
-                                dungeon[x] = new List<KeyValuePair<int, double>>();
+                                dungeon.Add(x, new List<KeyValuePair<int, double>>());
                             }
 
-                            if(dungeon[y] == null)
+                            if (!(dungeon.ContainsKey(y)))
                             {
-                                dungeon[y] = new List<KeyValuePair<int, double>>();
+                                dungeon.Add(y, new List<KeyValuePair<int, double>>());
                             }
 
                             dungeon[x].Add(new KeyValuePair<int, double> ( y, factor ));
                             dungeon[y].Add(new KeyValuePair<int, double> ( x, factor ));
                         }
 
-                        List<double> maxFactor = Enumerable.Repeat(double.Epsilon, n).ToList();
+                        double[] maxFactor = Enumerable.Repeat(double.Epsilon, n).ToArray();
                         maxFactor[0] = 1;
 
                         HashSet<KeyValuePair<int, double>> queue = new HashSet<KeyValuePair<int, double>>();
