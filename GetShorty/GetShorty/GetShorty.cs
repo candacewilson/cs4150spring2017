@@ -12,11 +12,10 @@ namespace GetShorty
         {
             String input;
             String[] parsedInput;
-            List<String> results = new List<String>();
+            List<double> results = new List<double>();
             int n;
             int m;
-            KeyValuePair<long, double> edge;
-            List<List<KeyValuePair<int, double>>> graph;;
+            List<KeyValuePair<int, double>>[] graph;;
 
             while (true)
             {
@@ -38,7 +37,7 @@ namespace GetShorty
                             break;
                         }
 
-                        graph = new List<List<KeyValuePair<int, double>>>(n);
+                        graph = new List<KeyValuePair<int, double>>[n];
                         for (int i = 0; i < m; i++)
                         {
                             parsedInput = Console.ReadLine().Split();
@@ -46,12 +45,22 @@ namespace GetShorty
                             int y = int.Parse(parsedInput[1]);
                             double factor = double.Parse(parsedInput[2]);
 
+                            if(graph[x] == null)
+                            {
+                                graph[x] = new List<KeyValuePair<int, double>>();
+                            }
+
+                            if(graph[y] == null)
+                            {
+                                graph[y] = new List<KeyValuePair<int, double>>();
+                            }
+
                             graph[x].Add(new KeyValuePair<int, double> ( y, factor ));
                             graph[y].Add(new KeyValuePair<int, double> ( x, factor ));
 
                         }
 
-                        List<double> maxSizes = Enumerable.Repeat(double.MinValue, n).ToList();
+                        List<double> maxSizes = Enumerable.Repeat(double.Epsilon, n).ToList();
                         maxSizes[0] = 1;
 
                         IntersectionCorridorComparer comparison = new IntersectionCorridorComparer();
@@ -63,56 +72,38 @@ namespace GetShorty
                         while(q.Count != 0)
                         {
                             var u = q.First().Key;
-                            q.Remove(q.First());
+                            q.Remove(new KeyValuePair<int, double>(q.First().Key, q.First().Value));
 
-                            for(var p in graph[u])
+                            foreach(var p in graph[u])
                             {
+                                var v = p.Key;
+                                var fraction = maxSizes[u] * p.Value;
 
-                            }
-                        }
-
-
-
-                        while (!q.empty())
-                        {
-                            auto u = q.begin()->first;
-                            q.erase(q.begin());
-
-                            for (auto p : g[u])
-                            {
-                                auto v = p.first;
-                                auto fraction = max_sizes[u] * p.second;
-                                if (fraction > max_sizes[v])
+                                if(fraction > maxSizes[v])
                                 {
-                                    q.erase(make_pair(v, max_sizes[v]));
-                                    q.insert(make_pair(v, fraction));
-                                    max_sizes[v] = fraction;
+                                    q.Remove(new KeyValuePair<int, double>(v, maxSizes[v]));
+                                    q.Add(new KeyValuePair<int, double>(v, fraction));
+                                    maxSizes[v] = fraction;
                                 }
                             }
                         }
 
-                        results.Add(Math.Round((Decimal)maxSizes[n-1], 4, MidpointRounding.AwayFromZero).ToString("n4"));
-
-                        cout << fixed << setprecision(4) << max_sizes[n - 1] << endl;
+                        results.Add(maxSizes[n-1]);
                     }
                 }
             }
 
-            foreach (String value in results)
+            foreach (double value in results)
             {
                 Console.WriteLine(value);
             }
 
             Console.Read();
-        }
+        } 
 
-
-
-        
-
-        public class IntersectionCorridorComparer : IComparer<KeyValuePair<long, double>>
+        public class IntersectionCorridorComparer : IComparer<KeyValuePair<int, double>>
         {
-            public int Compare(KeyValuePair<long, double> x, KeyValuePair<long, double> y)
+            public int Compare(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
             {
                 return Convert.ToInt32(x.Value > y.Value || (x.Value == y.Value && x.Key > y.Key));
             }
