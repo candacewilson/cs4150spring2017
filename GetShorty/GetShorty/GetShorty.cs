@@ -15,7 +15,7 @@ namespace GetShorty
             List<double> results = new List<double>();
             int n;
             int m;
-            Dictionary<int, HashSet<KeyValuePair<int, double>>> dungeon;
+            HashSet<KeyValuePair<int, double>>[] dungeon;
 
             while (true)
             {
@@ -37,7 +37,7 @@ namespace GetShorty
                             break;
                         }
 
-                        dungeon = new Dictionary<int, HashSet<KeyValuePair<int, double>>>(n);
+                        dungeon = new HashSet<KeyValuePair<int, double>>[n];
                         for (int i = 0; i < m; i++)
                         {
                             parsedInput = Console.ReadLine().Split();
@@ -45,14 +45,24 @@ namespace GetShorty
                             int y = int.Parse(parsedInput[1]);
                             double factor = double.Parse(parsedInput[2]);
 
-                            if(!(dungeon.ContainsKey(x)))
+                            //if(!(dungeon.ContainsKey(x)))
+                            //{
+                            //    dungeon.Add(x, new HashSet<KeyValuePair<int, double>>());
+                            //}
+
+                            //if (!(dungeon.ContainsKey(y)))
+                            //{
+                            //    dungeon.Add(y, new HashSet<KeyValuePair<int, double>>());
+                            //}
+
+                            if(dungeon[x] == null)
                             {
-                                dungeon.Add(x, new HashSet<KeyValuePair<int, double>>());
+                                dungeon[x] = new HashSet<KeyValuePair<int, double>>();
                             }
 
-                            if (!(dungeon.ContainsKey(y)))
+                            if (dungeon[y] == null)
                             {
-                                dungeon.Add(y, new HashSet<KeyValuePair<int, double>>());
+                                dungeon[y] = new HashSet<KeyValuePair<int, double>>();
                             }
 
                             dungeon[x].Add(new KeyValuePair<int, double> ( y, factor ));
