@@ -15,7 +15,7 @@ namespace GetShorty
             List<double> results = new List<double>();
             int n;
             int m;
-            HashSet<KeyValuePair<int, double>>[] dungeon;
+            HashSet<IntersectionAndFactor>[] dungeon;
 
             while (true)
             {
@@ -37,7 +37,7 @@ namespace GetShorty
                             break;
                         }
 
-                        dungeon = new HashSet<KeyValuePair<int, double>>[n];
+                        dungeon = new HashSet<IntersectionAndFactor>[n];
                         for (int i = 0; i < m; i++)
                         {
                             parsedInput = Console.ReadLine().Split();
@@ -45,50 +45,44 @@ namespace GetShorty
                             int y = int.Parse(parsedInput[1]);
                             double factor = double.Parse(parsedInput[2]);
 
-                            //if(!(dungeon.ContainsKey(x)))
-                            //{
-                            //    dungeon.Add(x, new HashSet<KeyValuePair<int, double>>());
-                            //}
-
-                            //if (!(dungeon.ContainsKey(y)))
-                            //{
-                            //    dungeon.Add(y, new HashSet<KeyValuePair<int, double>>());
-                            //}
-
                             if(dungeon[x] == null)
                             {
-                                dungeon[x] = new HashSet<KeyValuePair<int, double>>();
+                                dungeon[x] = new HashSet<IntersectionAndFactor>();
                             }
 
                             if (dungeon[y] == null)
                             {
-                                dungeon[y] = new HashSet<KeyValuePair<int, double>>();
+                                dungeon[y] = new HashSet<IntersectionAndFactor>();
                             }
 
-                            dungeon[x].Add(new KeyValuePair<int, double> ( y, factor ));
-                            dungeon[y].Add(new KeyValuePair<int, double> ( x, factor ));
+                            dungeon[x].Add(new IntersectionAndFactor( y, factor ));
+                            dungeon[y].Add(new IntersectionAndFactor( x, factor ));
                         }
 
                         double[] maxFactor = Enumerable.Repeat(double.Epsilon, n).ToArray();
                         maxFactor[0] = 1;
 
-                        HashSet<KeyValuePair<int, double>> queue = new HashSet<KeyValuePair<int, double>>();
-                        queue.Add(new KeyValuePair<int, double>(0, 1));
+                        HashSet<IntersectionAndFactor> queue = new HashSet<IntersectionAndFactor>();
+                        queue.Add(new IntersectionAndFactor(0, 1));
 
                         while(queue.Count != 0)
                         {
-                            var x = queue.First().Key;
-                            queue.Remove(new KeyValuePair<int, double>(queue.First().Key, queue.First().Value));
+                            var x = queue.First().Intersection;
+                            //queue.Remove(new IntersectionAndFactor(queue.First().Intersection, queue.First().Factor));
 
-                            foreach(var intersectionCorridor in dungeon[x])
+                            queue.RemoveWhere(s => s == new IntersectionAndFactor(queue.First().Intersection, queue.First().Factor));
+
+                            foreach (var intersectionCorridor in dungeon[x])
                             {
-                                var y = intersectionCorridor.Key;
-                                var fraction = maxFactor[x] * intersectionCorridor.Value;
+                                var y = intersectionCorridor.Intersection;
+                                var fraction = maxFactor[x] * intersectionCorridor.Factor;
 
                                 if(fraction > maxFactor[y])
                                 {
-                                    queue.Remove(new KeyValuePair<int, double>(y, maxFactor[y]));
-                                    queue.Add(new KeyValuePair<int, double>(y, fraction));
+                                    queue.RemoveWhere(s => s == new IntersectionAndFactor(y, maxFactor[y]));
+
+                                    //queue.Remove(new IntersectionAndFactor(y, maxFactor[y]));
+                                    queue.Add(new IntersectionAndFactor(y, fraction));
                                     maxFactor[y] = fraction;
                                 }
                             }
@@ -106,5 +100,44 @@ namespace GetShorty
 
             Console.Read();
         }
+
+        public class IntersectionAndFactor
+        {
+            private int intersection;
+            private double factor;
+
+            public IntersectionAndFactor(int intersection, double factor)
+            {
+                this.intersection = intersection;
+                this.factor = factor;
+            }
+
+            public int Intersection
+            {
+                get { return intersection; }
+            }
+
+            public double Factor
+            {
+                get { return factor; }
+            }
+        }
+
+        public class IntersectionAndFactorComparer : IEqualityComparer<IntersectionAndFactor>
+        {
+            public bool Equals(IntersectionAndFactor x, IntersectionAndFactor y)
+            {
+                if (x == null && y == null) return true;
+                if (x == null || y == null) return false;
+                return x.Culture == y.Culture;
+            }
+
+            public int GetHashCode(IntersectionAndFactor obj)
+            {
+                if (obj == null) return 0;
+                return obj.Culture == null ? 0 : obj.Culture.GetHashCode();
+            }
+        }
+
     }
 }
