@@ -15,7 +15,7 @@ namespace GetShorty
             List<double> results = new List<double>();
             int n;
             int m;
-            Dictionary<int, List<KeyValuePair<int, double>>> dungeon;
+            Dictionary<int, KeyValuePair<int, double>[]> dungeon;
 
             while (true)
             {
@@ -37,7 +37,7 @@ namespace GetShorty
                             break;
                         }
 
-                        dungeon = new Dictionary<int, List<KeyValuePair<int, double>>>(n);
+                        dungeon = new Dictionary<int, KeyValuePair<int, double>[]>(n);
                         for (int i = 0; i < m; i++)
                         {
                             parsedInput = Console.ReadLine().Split();
@@ -47,16 +47,16 @@ namespace GetShorty
 
                             if(!(dungeon.ContainsKey(x)))
                             {
-                                dungeon.Add(x, new List<KeyValuePair<int, double>>());
+                                dungeon.Add(x, new KeyValuePair<int, double>[m]);
                             }
 
                             if (!(dungeon.ContainsKey(y)))
                             {
-                                dungeon.Add(y, new List<KeyValuePair<int, double>>());
+                                dungeon.Add(y, new KeyValuePair<int, double>[m]);
                             }
 
-                            dungeon[x].Add(new KeyValuePair<int, double> ( y, factor ));
-                            dungeon[y].Add(new KeyValuePair<int, double> ( x, factor ));
+                            dungeon[x][i] = new KeyValuePair<int, double> ( y, factor );
+                            dungeon[y][i] = new KeyValuePair<int, double> ( x, factor );
                         }
 
                         double[] maxFactor = Enumerable.Repeat(double.Epsilon, n).ToArray();
