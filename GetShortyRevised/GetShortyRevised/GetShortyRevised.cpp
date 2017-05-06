@@ -9,13 +9,13 @@
 #include <algorithm>
 
 using namespace std;
-typedef pair<int, double> edge;
-typedef vector<vector<edge>> Dungeon;
+typedef pair<long, double> corridor;
+typedef vector<vector<corridor>> Dungeon;
 
 int main() 
 {
-	int n, m;
-	int x, y;
+	long n, m;
+	long x, y;
 	double factor;
 	vector<double> results;
 
@@ -23,6 +23,11 @@ int main()
 	{
 		if (n == 0 && m == 0)
 		{
+			for (auto value : results)
+			{
+				cout << fixed << setprecision(4) << value << endl;
+			}
+
 			break;
 		}
 
@@ -39,25 +44,23 @@ int main()
 		vector<double> maxFactor(n, numeric_limits<double>::min());
 		maxFactor[0] = 1;
 
-		auto comparator = [](const pair<int, double>& x, const pair<int, double>& y) {
+		auto intersectionCorridorComparator = [](const pair<long, double>& x, const pair<long, double>& y) {
 			return x.second > y.second || (x.second == y.second && x.first > y.first);
 		};
 
-		set<pair<int, double>, decltype(comparator)> queue(comparator);
+		set<pair<long, double>, decltype(intersectionCorridorComparator)> queue(intersectionCorridorComparator);
 		queue.insert(make_pair(0, 1));
 
-		while (!(queue.empty())) 
+		while (!queue.empty()) 
 		{
-			auto y = queue.begin()->first;
+			auto x = queue.begin()->first;
 			queue.erase(queue.begin());
 
-			for (auto intersectionCorridor : dungeon[y]) 
+			for (auto intersectionCorridor : dungeon[x]) 
 			{
 				auto y = intersectionCorridor.first;
-				auto fraction = maxFactor[y] * intersectionCorridor.second;
-
-				if (fraction > maxFactor[y]) 
-				{
+				auto fraction = maxFactor[x] * intersectionCorridor.second;
+				if (fraction > maxFactor[y]) {
 					queue.erase(make_pair(y, maxFactor[y]));
 					queue.insert(make_pair(y, fraction));
 					maxFactor[y] = fraction;
@@ -68,11 +71,5 @@ int main()
 		results.push_back(maxFactor[n - 1]);
 	}
 
-	for (auto value : results)
-	{
-		cout << fixed << setprecision(4) << value << endl;
-	}
-
 	return 0;
 }
-
