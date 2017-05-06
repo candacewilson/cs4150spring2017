@@ -68,9 +68,9 @@ namespace GetShorty
                         while(queue.Count != 0)
                         {
                             var x = queue.First().Intersection;
-                            //queue.Remove(new IntersectionAndFactor(queue.First().Intersection, queue.First().Factor));
+                            queue.Remove(new IntersectionAndFactor(queue.First().Intersection, queue.First().Factor));
 
-                            queue.RemoveWhere(s => s == new IntersectionAndFactor(queue.First().Intersection, queue.First().Factor));
+                            //queue.RemoveWhere(s => s == new IntersectionAndFactor(queue.First().Intersection, queue.First().Factor));
 
                             foreach (var intersectionCorridor in dungeon[x])
                             {
@@ -79,9 +79,9 @@ namespace GetShorty
 
                                 if(fraction > maxFactor[y])
                                 {
-                                    queue.RemoveWhere(s => s == new IntersectionAndFactor(y, maxFactor[y]));
+                                    //queue.RemoveWhere(s => s == new IntersectionAndFactor(y, maxFactor[y]));
 
-                                    //queue.Remove(new IntersectionAndFactor(y, maxFactor[y]));
+                                    queue.Remove(new IntersectionAndFactor(y, maxFactor[y]));
                                     queue.Add(new IntersectionAndFactor(y, fraction));
                                     maxFactor[y] = fraction;
                                 }
@@ -122,22 +122,5 @@ namespace GetShorty
                 get { return factor; }
             }
         }
-
-        public class IntersectionAndFactorComparer : IEqualityComparer<IntersectionAndFactor>
-        {
-            public bool Equals(IntersectionAndFactor x, IntersectionAndFactor y)
-            {
-                if (x == null && y == null) return true;
-                if (x == null || y == null) return false;
-                return x.Culture == y.Culture;
-            }
-
-            public int GetHashCode(IntersectionAndFactor obj)
-            {
-                if (obj == null) return 0;
-                return obj.Culture == null ? 0 : obj.Culture.GetHashCode();
-            }
-        }
-
     }
 }
