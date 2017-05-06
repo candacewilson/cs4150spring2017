@@ -60,7 +60,9 @@ int main()
 			{
 				auto y = intersectionCorridor.first;
 				auto fraction = maxFactor[x] * intersectionCorridor.second;
-				if (fraction > maxFactor[y]) {
+
+				if (fraction > maxFactor[y]) 
+				{
 					queue.erase(make_pair(y, maxFactor[y]));
 					queue.insert(make_pair(y, fraction));
 					maxFactor[y] = fraction;
