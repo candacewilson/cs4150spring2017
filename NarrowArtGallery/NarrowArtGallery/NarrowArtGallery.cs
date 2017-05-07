@@ -40,6 +40,17 @@ namespace NarrowArtGallery
 
                     for (int i = 0; i < N; i++)
                     {
+                        for (int j = 0; j <= k; j++)
+                        {
+                            for (int h = 0; h < 3; h++)
+                            {
+                                galleryRoomStatus[i, j, h] = double.NegativeInfinity;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < N; i++)
+                    {
                         parsedInput = Console.ReadLine().Split();
 
                         gallery[i, 0] = int.Parse(parsedInput[0]);
