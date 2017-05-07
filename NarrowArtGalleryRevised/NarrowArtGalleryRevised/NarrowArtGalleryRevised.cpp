@@ -2,22 +2,8 @@
 //
 
 #include "stdafx.h"
-#include<map>
-#include<string>
-#include<cstring>
-#include<cstdio>
-#include<cstdlib>
-#include<cmath>
 #include<queue>
-#include<vector>
 #include<iostream>
-#include<algorithm>
-#include<bitset>
-#include<climits>
-#include<list>
-#include<iomanip>
-#include<stack>
-#include<set>
 
 using namespace std;
 
@@ -43,7 +29,19 @@ int main()
 			}
 		}
 
-		// roomStatus will contain the max possible N rows, with 3 different statuses, 
+		// roomStatus will contain the max possible N rows, with 3 different statuses, with each status contain the max
+		// possible N rows (to simulate the gallery for each of the 3 statuses).
+		//
+		// roomStatus[200][3][200] = 
+		// {
+		//		{{x1, x2, ..., x200}, {x1, x2, ..., x200}, {x1, x2, ..., x200}},
+		//		{{x1, x2, ..., x200}, {x1, x2, ..., x200}, {x1, x2, ..., x200}},
+		//		...
+		//		{{x1, x2, ..., x200}, {x1, x2, ..., x200}, {x1, x2, ..., x200}}
+		// };
+		//
+		// 3 different statuses: 0 = either may be closed if desired, 1 = close left, 2 = close right.
+
 		for (int i = 0; i < 3; i++)
 		{
 			fill(roomStatus[0][i], roomStatus[0][i] + k + 1, INT_MIN);
