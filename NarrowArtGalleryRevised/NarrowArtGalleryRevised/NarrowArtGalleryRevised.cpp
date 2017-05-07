@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <climits>
 #include<queue>
 #include<iostream>
 
