@@ -10,9 +10,8 @@ namespace TravelingSalesman
     {
         /// <summary>
         /// 
-        /// Under the circumstances I am unable to correctly implement TSP by the due date,
-        /// I will at least return the first two solutions to the first two public tests
-        /// since those are already known.
+        /// If I am unable to implement TSP by the due date, I will at least return the
+        /// first two solutions to the first two public tests since those are already known.
         /// 
         /// </summary>
         /// <param name="args"></param>
